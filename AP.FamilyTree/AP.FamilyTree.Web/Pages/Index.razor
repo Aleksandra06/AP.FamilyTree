@@ -1,7 +1,27 @@
 ﻿@page "/"
+@using AP.FamilyTree.Web.Data.SharedService
+@using Microsoft.Extensions.Logging
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+@code
+{
+    [Inject] protected ILogger Logger { get; set; }
+
+    protected override void OnInitialized()
+    {
+        try
+        {
+           // throw new Exception();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, $"user1234*Error: ZertifikatModule/OnInitializedAsync");
+
+        }
+    }
+}
