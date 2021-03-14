@@ -1,0 +1,78 @@
+﻿@page "/system/errors"
+@using MatBlazor
+@inherits SystemErrorLogPageViewModel
+@*@attribute [Authorize(Policy = "SysAdminRoles")]*@
+
+@if (!IsFailed)
+{
+    @*<h3>System</h3>
+        <ErrorLogComponent Model="@Model"></ErrorLogComponent>*@
+    <div class="d-flex justify-content-between">
+        <div class="d-flex mb-2">
+            <h3>Система</h3>
+        </div>
+        <div class="d-flex mb-2">
+            <input type="search" placeholder="Пользователь" class="form-control form-control-sm mr-1" @bind-value="@Filter.UserFltr" @bind-value:event="oninput" />
+            <input type="search" placeholder="Ошибка" class="form-control form-control-sm mr-1" @bind-value="@Filter.ErrorFltr" @bind-value:event="oninput" />
+            <input type="date" @bind-value="@Filter.StartDate" class="form-control form-control-sm mr-1" />
+            <input type="date" @bind-value="@Filter.EndDate" class="form-control form-control-sm mr-1" />
+            <span class="btn btn-nav mr-1" @onclick="@ExportErrors">Сохранить</span>
+            <span class="btn btn-nav" @onclick="@DeleteErrors">Удалить</span>
+        </div>
+    </div>
+
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th><SortIcon Column="LogApplicationErrorId" Title="Id" Sort="@Sorting"></SortIcon></th>
+                <th class="w-10"><SortIcon Column="UserData" Title="Пользователь" Sort="@Sorting"></SortIcon></th>
+                <th class="w-10"><SortIcon Column="InsertDate" Title="Дата" Sort="@Sorting"></SortIcon></th>
+                <th>Ошибка</th>
+                <th><SortIcon Column="BrowserInfo" Title="Браузер" Sort="@Sorting"></SortIcon></th>
+                <th class="w-10" title="AppVersion"><SortIcon Column="AppVersion" Title="Версия" Sort="@Sorting"></SortIcon></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                foreach (var i in Model)
+                {
+                    <tr>
+                        <td>@i.Id</td>
+                        <td>@GetLogUser(i.UserData)</td>
+                        <td>@i.InsertDate</td>
+                        <td>@i.ErrorMsg</td>
+                        <td>@i.BrowserInfo</td>
+                        <td>@i.AppVersion</td>
+                        <td>
+                            <i class="btn glyphicon glyphicon-inbox" @onclick="@(() => ShowStackTraceDialog(i.ErrorContext))" title="@GetTitle(i.ErrorContext)"></i>
+                        </td>
+                        <td>
+                            <i class="btn glyphicon glyphicon-remove-circle cursor" @onclick="@(() => RemoveAsync(i))"></i>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <MatDialog @bind-IsOpen="@IsOpenDialogStackTrace" CanBeClosed="false">
+        <MatDialogTitle Class="diHeader">
+            <h3>Änderungen</h3>
+            <div class="btn-group">
+                <button @onclick="@(e => { IsOpenDialogStackTrace = false;})" class="btn btn-nav">X</button>
+            </div>
+        </MatDialogTitle>
+        <MatDialogContent>
+            <div style="font-size:14px;">
+                @TextDialogStackTrace
+            </div>
+        </MatDialogContent>
+    </MatDialog>
+}
+else if (IsFailed)
+{
+    <ErrorComponentModel Model="@ErrorModel" />
+}

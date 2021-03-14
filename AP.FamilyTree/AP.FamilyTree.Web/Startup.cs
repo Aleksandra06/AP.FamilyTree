@@ -16,7 +16,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AP.FamilyTree.Db;
+using AP.FamilyTree.Web.Data.Services.SystemPageServices;
 using AP.FamilyTree.Web.Data.SharedService;
+using MatBlazor;
 using Microsoft.Extensions.Logging;
 
 namespace AP.FamilyTree.Web
@@ -45,6 +47,7 @@ namespace AP.FamilyTree.Web
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
@@ -54,9 +57,11 @@ namespace AP.FamilyTree.Web
             services.AddSingleton<ILoggerProvider, LoggerProvider>();
             services.AddSingleton<IPushNotificationsQueue, PushNotificationsQueue>();
 
+            services.AddMatBlazor();
+
             services.AddHostedService<PushNotificationsDequeuer>();
 
-            //services.AddSingleton<WeatherForecastService>();
+            services.AddScoped<SystemPageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,37 +1,68 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">AP.FamilyTree.Web</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>
+﻿@using Microsoft.AspNetCore.Http.Extensions
+@inject NavigationManager UriHelper
+@*<div class="top-row pl-4 navbar navbar-dark">
+        <a class="navbar-brand" href="">AP.FamilyTree.Web</a>
+        <button class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </li>
-    </ul>
+    <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+        <ul class="nav flex-column">
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                    <span class="oi oi-home" aria-hidden="true"></span> Home
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="counter">
+                    <span class="oi oi-plus" aria-hidden="true"></span> Counter
+                </NavLink>
+            </li>
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="fetchdata">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+                </NavLink>
+            </li>
+        </ul>
+    </div>*@
+
+<div class="top-row px-4" style="background-color: lightgreen;">
+    <div class="row mr-auto">
+        @*<span class="span-link" title="Realisierungskonzept: Autragserfassung">RK: Autragserfassung</span>*@
+        @*<AuthorizeView>
+            <Authorized>*@
+        <a class="nav-link" href="Counter" @onclick:preventDefault @onclick="@(()=>UriHelper.NavigateTo(UriHelper.BaseUri + "Counter", true))">
+            Kunden
+        </a>
+        @*<a class="nav-link" href="Auftrag" @onclick:preventDefault @onclick="@(()=>UriHelper.NavigateTo(UriHelper.BaseUri + "Auftrag", true))">
+                Auftrag
+            </a>
+            </Authorized>
+            </AuthorizeView>*@
+        @*<AuthorizeView Roles="Administrator">
+            <Authorized>*@
+        <a class="nav-link" href="system/errors" @onclick:preventDefault @onclick="@(()=>UriHelper.NavigateTo(UriHelper.BaseUri + "system/errors", true))">
+            Система
+        </a>
+        @*<a class="nav-link" href="system/smtpsettings" @onclick:preventDefault @onclick="@(()=>UriHelper.NavigateTo(UriHelper.BaseUri + "system/smtpsettings", true))">
+                SMTP
+            </a>*@
+        @*</Authorized>
+            </AuthorizeView>*@
+    </div>
+    <div class="row align-items-center">
+        <LoginDisplay />
+    </div>
 </div>
 
 @code {
-    private bool collapseNavMenu = true;
+    //private bool collapseNavMenu = true;
 
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    //private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
+    //private void ToggleNavMenu()
+    //{
+    //    collapseNavMenu = !collapseNavMenu;
+    //}
 }

@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AP.FamilyTree.Web", "AP.FamilyTree.Web\AP.FamilyTree.Web.csproj", "{E2BC00F7-18EF-485B-8356-01B53913A4CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AP.FamilyTree.Web", "AP.FamilyTree.Web\AP.FamilyTree.Web.csproj", "{E2BC00F7-18EF-485B-8356-01B53913A4CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AP.FamilyTree.Db", "AP.FamilyTree.Db\AP.FamilyTree.Db.csproj", "{7073A6FF-4D56-4BB2-A046-60681CD25EA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AP.FamilyTree.Db", "AP.FamilyTree.Db\AP.FamilyTree.Db.csproj", "{7073A6FF-4D56-4BB2-A046-60681CD25EA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

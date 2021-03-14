@@ -1,4 +1,11 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+@import url('glyphicon.css');
+
+@font-face {
+    font-family: 'Glyphicons Halflings';
+    src: url('fonts/glyphicons-halflings-regular.eot');
+    src: url('fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('fonts/glyphicons-halflings-regular.woff2') format('woff2'), url('fonts/glyphicons-halflings-regular.woff') format('woff'), url('fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -48,3 +55,164 @@ a, .btn-link {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+.top-row {
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.main {
+    flex: 1;
+}
+
+.main .top-row {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #d6d5d5;
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+}
+
+.main .top-row > a {
+    margin-left: 1.5rem;
+}
+
+.btn.svg-btn svg {
+    margin-top: -10px;
+}
+
+
+a, .btn-link, .nav-link {
+    color: #0366d6;
+    cursor: pointer;
+}
+
+h1 {
+    font-size: 24px;
+}
+
+h2 {
+    font-size: 22px;
+}
+
+h3 {
+    font-size: 18px;
+}
+
+h4 {
+    font-size: 14px;
+}
+
+.w-10 {
+    width: 10% !important;
+}
+
+.w-20 {
+    width: 20% !important;
+}
+
+.w-30 {
+    width: 30% !important;
+}
+
+.w-60 {
+    width: 60% !important;
+}
+
+.w-70 {
+    width: 70% !important;
+}
+
+.w-200 {
+    width: 200px;
+}
+
+.w-400 {
+    width: 400px;
+}
+
+.w-600 {
+    width: 600px;
+}
+
+.w-65px {
+    width: 65px;
+}
+
+.row {
+    margin: 0px;
+}
+
+.btn {
+    border-color: lightgray !important;
+    padding: .2rem .2rem;
+    cursor: pointer;
+}
+
+.btn.glyphicon:hover {
+    background-color: #f7f7f7;
+}
+
+.mat-btn {
+    font-size: 20px;
+    border-color: lightgray !important;
+    padding: .1rem .1rem;
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    border: 1px solid transparent;
+}
+
+.btn-small {
+    padding: .07rem .2rem !important;
+}
+
+.i-btn {
+    padding: .3rem .2rem;
+}
+
+.btn-nav {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.mdc-dialog {
+    z-index: 105 !important;
+}
+
+.mdc-dialog__title::before {
+    height: 25px !important;
+}
+
+.mat-tab-group {
+    border-top: 1px silver solid;
+}
+
+.mdc-tab-bar {
+    background-color: #f7f7f7;
+}
+
+.mdc-tab {
+    height: 35px !important;
+}
+
+.mdc-dialog .mdc-dialog__surface {
+    max-width: 1300px !important;
+    max-height: 700px;
+}
+
+.mdc-dialog__title {
+    padding: 10px 24px !important;
+    padding-bottom: 0px !important;
+}
+
+.mdc-dialog .mdc-dialog__title {
+    border: none;
+}
