@@ -19,6 +19,7 @@ using AP.FamilyTree.Db;
 using AP.FamilyTree.Web.Data.Services.SystemPageServices;
 using AP.FamilyTree.Web.Data.SharedService;
 using MatBlazor;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace AP.FamilyTree.Web
@@ -42,16 +43,23 @@ namespace AP.FamilyTree.Web
             //options.UseSqlite("Data Source = Users.db")
             //);
 
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
+            services.AddHttpContextAccessor();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddDbContext<FamilyTreeDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-
             services.AddRazorPages();
+            services.AddMvcCore();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddControllersWithViews();
 
             services.AddSingleton<ILogger, Logger>();
             services.AddSingleton<ILoggerProvider, LoggerProvider>();
@@ -62,6 +70,10 @@ namespace AP.FamilyTree.Web
             services.AddHostedService<PushNotificationsDequeuer>();
 
             services.AddScoped<SystemPageService>();
+            //services.AddScoped<AccountController>();
+
+
+            services.AddLogging();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,9 +101,10 @@ namespace AP.FamilyTree.Web
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+               // endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
+                endpoints.MapControllerRoute("default", "{controller=Account}/{action=Index}/{id?}");
             });
         }
     }

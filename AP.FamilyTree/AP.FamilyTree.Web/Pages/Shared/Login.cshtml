@@ -1,0 +1,32 @@
+﻿@*@page "/login"*@
+@model AP.FamilyTree.Web.PageModels.Account.LoginViewModel
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    Layout = "Layout";
+}
+
+<div class="col-md-12 pt-5">
+    <h1>Дерево родословной</h1>
+    <form class="form-group" method="post" asp-action="Login" asp-controller="Account" asp-route-returnUrl="@Model.ReturnUrl">
+        <label style="color: red;">@Model?.Error</label><br />
+        <div class="form-group">
+            <label asp-for="Email"></label><br />
+            <input asp-for="Email" class="form-control row" name="Email" type="text" style="width: 300px;" />
+            <span asp-validation-for="Email"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password"></label><br />
+            <input asp-for="Password" class="form-control row" name="password" type="password" style="width: 300px;" />
+            <span asp-validation-for="Password"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="RememberMe"></label><br />
+            <input asp-for="RememberMe" />
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-light row">Войти</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AMS-Zertifikat</title>
+    <link rel="stylesheet" href="~/css/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <base href="~/" />
+</head>
+<body>
+    <app>
+        <div class="main">
+            @*<div class="top-row px-4">
+                <a class="nav-link" href="/">
+                    <span class="oi oi-home" aria-hidden="true"></span> Номе
+                </a>
+            </div>*@
+
+            <div class="content px-4">
+                @RenderBody()
+            </div>
+        </div>
+    </app>
+    <script src="_framework/blazor.server.js"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
