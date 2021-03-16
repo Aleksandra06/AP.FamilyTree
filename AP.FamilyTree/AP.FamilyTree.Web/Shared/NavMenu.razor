@@ -54,13 +54,13 @@
     <div class="row align-items-center">
         <AuthorizeView>
             <Authorized>
-                <a href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</a>
+                <a class="pr-5" href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</a>
                 <form method="post" action="Identity/Account/LogOut">
-                    <button type="submit" class="nav-link btn btn-link">Log out</button>
+                    <button type="submit" class="nav-link btn btn-link">Выйти</button>
                 </form>
             </Authorized>
             <NotAuthorized>
-                <a style="padding-right: 8px;" href="Identity/Account/Register">Регистрация</a>
+                <a style="padding-right: 8px;" href="register">Регистрация</a>
                 <a href="login">Войти</a>
             </NotAuthorized>
         </AuthorizeView>

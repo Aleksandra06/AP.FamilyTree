@@ -9,9 +9,10 @@ namespace AP.FamilyTree.Web.Data.Controllers
     public class AccountController : Microsoft.AspNetCore.Mvc.Controller
     {
         private SignInManager<IdentityUser> mSignInManager;
-
-        public AccountController(SignInManager<IdentityUser> signInManager)
+        private readonly UserManager<IdentityUser> mUserManager;
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager)
         {
+            mUserManager = userManager;
             mSignInManager = signInManager;
         }
 
@@ -51,12 +52,47 @@ namespace AP.FamilyTree.Web.Data.Controllers
             return View(model);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Logout()
-        //{
-        //    await mSignInManager.SignOutAsync();
-        //    return RedirectToPage("login");
-        //}
+        [HttpGet]
+        [Route("register")]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("register")]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = new IdentityUser { Email = model.Email, UserName = model.Email };
+                // добавляем пользователя
+                var result = await mUserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    // установка куки
+                    await mSignInManager.SignInAsync(user, false);
+                    return RedirectToPage("/_Host");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [Route("logout")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await mSignInManager.SignOutAsync();
+            return Redirect("~/");
+            //return RedirectToPage("/login");
+        }
     }
 }

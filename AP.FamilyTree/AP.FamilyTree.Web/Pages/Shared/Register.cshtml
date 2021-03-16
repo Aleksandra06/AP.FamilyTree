@@ -1,0 +1,30 @@
+﻿@model AP.FamilyTree.Web.PageModels.Account.RegisterViewModel
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    Layout = "Layout";
+}
+
+<h2>Регистрация нового пользователя</h2>
+<form class="form-group"  method="post" asp-controller="Account" asp-action="Register">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div class="form-group" >
+        <label asp-for="Email"></label><br />
+        <input class="form-control row"  asp-for="Email"  style="width: 300px;"/>
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div class="form-group" >
+        <label asp-for="Password"></label><br />
+        <input class="form-control row"  asp-for="Password"  style="width: 300px;"/>
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div class="form-group" >
+        <label asp-for="PasswordConfirm"></label><br />
+        <input class="form-control row"  asp-for="PasswordConfirm"  style="width: 300px;"/>
+        <span asp-validation-for="PasswordConfirm"></span>
+    </div>
+    <div class="form-group" >
+        <button type="submit" class="btn btn-light row">Регистрация</button>
+    </div>
+</form>
