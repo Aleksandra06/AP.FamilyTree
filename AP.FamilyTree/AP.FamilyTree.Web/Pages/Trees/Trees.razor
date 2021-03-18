@@ -1,0 +1,13 @@
+﻿@page "/trees"
+@inherits TreesViewModel
+
+<h5>Деревья</h5>
+
+<div class="row">
+    @foreach (var item in ModelList)
+    {
+        <div class="col-3">
+            <TreeCard Model="@item" />
+        </div>
+    }
+</div>

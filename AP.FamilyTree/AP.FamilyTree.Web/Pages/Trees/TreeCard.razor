@@ -1,0 +1,25 @@
+﻿@using AP.FamilyTree.Web.PageModels.Trees
+@inject NavigationManager UriHelper
+
+@if (Model != null)
+{
+    <div style="border: 4px double black; text-align: center;">
+        <h6>@Model.Name</h6>
+        <h6>@Model.DateString</h6>
+        <i class="btn glyphicon glyphicon-eye-open" @onclick="@Open"></i>
+    </div>
+}
+
+@code {
+    [Parameter] public TreeCardItemViewModel Model { get; set; }
+
+    //protected override async Task OnParametersSetAsync()
+    //{
+
+    //}
+
+    private async Task Open()
+    {
+        UriHelper.NavigateTo(UriHelper.BaseUri + $"tree/{Model.Id}");
+    }
+}

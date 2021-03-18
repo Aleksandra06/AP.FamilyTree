@@ -19,6 +19,7 @@ using AP.FamilyTree.Db;
 using AP.FamilyTree.Mail;
 using AP.FamilyTree.Web.Data.Services;
 using AP.FamilyTree.Web.Data.Services.SystemPageServices;
+using AP.FamilyTree.Web.Data.Services.TreesServices;
 using AP.FamilyTree.Web.Data.SharedService;
 using MatBlazor;
 using Microsoft.AspNetCore.Http;
@@ -75,7 +76,7 @@ namespace AP.FamilyTree.Web
             services.AddSingleton<MailingService>();
 
             services.AddScoped<SystemPageService>();
-            //services.AddScoped<AccountController>();
+            services.AddScoped<TreesService>();
 
 
             services.AddLogging();
