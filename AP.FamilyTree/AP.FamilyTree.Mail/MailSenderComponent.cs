@@ -33,7 +33,7 @@ namespace AP.FamilyTree.Mail
                 message.Bcc.Add(mailData.BccEmail);
                 message.Subject = mailData.Subject;
                 message.Body = mailData.Body;
-                message.IsBodyHtml = false;
+                message.IsBodyHtml = true;
 
                 if (mailData.AttachmentData != null)
                 {

@@ -138,7 +138,7 @@ namespace AP.FamilyTree.Web.Data.Controllers
                 {
                     ToEmail = model.Email,
                     Subject = "Reset Password",
-                    Text = $"Для сброса пароля пройдите по ссылке: <a href='{callbackUrl}'>link</a>"
+                    Text = $"Для сброса пароля пройдите по <a href='{callbackUrl}'>ссылке</a>"
                 };
                 MailingService.SendMessage(message);
                 return View("ForgotPasswordConfirmation");
