@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AP.FamilyTree.Db\AP.FamilyTree.Db.csproj" />
+    <ProjectReference Include="..\AP.FamilyTree.Mail\AP.FamilyTree.Mail.csproj" />
   </ItemGroup>
 
 </Project>

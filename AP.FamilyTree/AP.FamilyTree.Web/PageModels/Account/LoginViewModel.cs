@@ -17,7 +17,5 @@ namespace AP.FamilyTree.Web.PageModels.Account
         public bool RememberMe { get; set; }
 
         public string ReturnUrl { get; set; }
-
-        public string Error { get; set; }
     }
 }

@@ -16,6 +16,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AP.FamilyTree.Db;
+using AP.FamilyTree.Mail;
+using AP.FamilyTree.Web.Data.Services;
 using AP.FamilyTree.Web.Data.Services.SystemPageServices;
 using AP.FamilyTree.Web.Data.SharedService;
 using MatBlazor;
@@ -68,6 +70,9 @@ namespace AP.FamilyTree.Web
             services.AddMatBlazor();
 
             services.AddHostedService<PushNotificationsDequeuer>();
+
+            services.AddSingleton(Configuration.GetSection("MailSetting").Get<MailSettings>());
+            services.AddSingleton<MailingService>();
 
             services.AddScoped<SystemPageService>();
             //services.AddScoped<AccountController>();
