@@ -3,20 +3,37 @@
 
 <h5>Деревья</h5>
 
-<div class="row">
-    @foreach (var item in ModelList)
-    {
-        <div class="col-3">
-            <TreeCard Model="@item" Change="@Edit" Remove="@Remove" />
-        </div>
-    }
-    <div style="border: 4px double black; text-align: center;">
-        <h6>Новое дерево</h6>
-        <i class="btn btn-nav" @onclick="@CreateTree">Создать дерево</i>
-    </div>
-</div>
-
-@if (EditDialog?.IsOpenDialog == true)
+@if (!IsFailed)
 {
-    <EditTreeDialog ViewModel="@EditDialog" SaveItem="@Save" ReloadItem="@Reload" />
+    @if (!mIsItemLoaded)
+    {
+        <span class="spinner-border spinner-border-sm centerSpinner" role="status" aria-hidden="true"></span>
+        <div class="overlay"></div>
+    }
+
+    <div class="row">
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                <div class="col-3">
+                    <TreeCard Model="@item" Change="@Edit" Remove="@Remove" />
+                </div>
+            }
+        }
+        <div style="border: 4px double black; text-align: center;">
+            <h6>Новое дерево</h6>
+            <i class="btn btn-nav" @onclick="@CreateTree">Создать дерево</i>
+        </div>
+    </div>
+
+    @if (mEditViewModel?.DialogIsOpen == true)
+    {
+        <EditTreeDialog ViewModel="@mEditViewModel" SaveItem="@Save" ReloadItem="@Reload" />
+    }
+    <InformarionDialog ViewModel="@mInformationDialog" Close="@CloseInformationDialog" />
+}
+else
+{
+    <ErrorComponent Model="@ErrorModel" />
 }

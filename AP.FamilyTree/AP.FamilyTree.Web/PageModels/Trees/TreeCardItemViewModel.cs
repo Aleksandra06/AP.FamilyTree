@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AP.FamilyTree.Db.Models;
+using AP.FamilyTree.Web.PageModels.Interfaces;
 
 namespace AP.FamilyTree.Web.PageModels.Trees
 {
-    public class TreeCardItemViewModel : ICloneable
+    public class TreeCardItemViewModel : ICloneable, IIsRefreshed
     {
         private TreesModel _item;
         public TreesModel Item => _item;
@@ -90,6 +91,7 @@ namespace AP.FamilyTree.Web.PageModels.Trees
 
         public bool Edit = false;
         public bool Admin = false;
+        public bool IsRefreshed { get; set; } = false;
         public object Clone()
         {
             TreeCardItemViewModel tempObject = (TreeCardItemViewModel)this.MemberwiseClone();

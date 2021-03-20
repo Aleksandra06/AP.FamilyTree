@@ -124,7 +124,7 @@ namespace AP.FamilyTree.Web.Data.Services.TreesServices
             model.Name = item.Name;
             model.Surnames = item.Surnames;
 
-            var newItem = mRepo.Update(model);
+            var newItem = mRepo.Update(model, item.Item.RowVersion);
 
             return new TreeCardItemViewModel(model, item.Admin, item.Edit);
         }

@@ -2,7 +2,7 @@
 @using MatBlazor
 
 <div>
-    <MatDialog @bind-IsOpen="@ViewModel.IsOpenDialog" CanBeClosed="false">
+    <MatDialog @bind-IsOpen="@ViewModel.DialogIsOpen" CanBeClosed="false">
         <EditForm Model="ViewModel.Model" OnValidSubmit="@(() => { SaveItem.InvokeAsync(ViewModel.Model); })">
             <MatDialogTitle class="diHeader">
                 <h3>@(ViewModel.Model.Id > 0 ? "Изменение дерева #" + ViewModel.Model.Id : "Создание дерева")</h3>
@@ -15,7 +15,7 @@
                     {
                         <input type="submit" value="Speichern" class="btn btn-nav btn-primary mr-1" style="float: right; background: darkgreen;" />
                     }
-                    <span class="btn btn-nav" @onclick="@(e => {ViewModel.IsOpenDialog = false;})">X</span>
+                    <span class="btn btn-nav" @onclick="@(e => {ViewModel.DialogIsOpen = false;})">X</span>
                 </div>
                 <hr />
             </MatDialogTitle>

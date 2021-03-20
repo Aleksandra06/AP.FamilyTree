@@ -1,0 +1,25 @@
+﻿@using MatBlazor
+<MatDialog @bind-IsOpen="@ViewModel.IsOpenDialog" CanBeClosed="false">
+    <MatDialogTitle Class="diHeader">
+        <h3>@ViewModel.Title</h3>
+        <hr />
+    </MatDialogTitle>
+    <MatDialogContent>
+        <div class="d-flex flex-column justify-content-between h-100">
+            <div style="max-width:400px;">
+                @ViewModel.Text
+            </div>
+            <div class="btn-group mt-4 row">
+                <div class="@(ViewModel.BtnClass)" style="align-content:center" @onclick="@(()=> { Close.InvokeAsync(null); ViewModel.IsOpenDialog = false; })">@ViewModel.Btn</div>
+            </div>
+        </div>
+    </MatDialogContent>
+</MatDialog>
+
+@code {
+    [Parameter]
+    public InformarionDialogViewModel ViewModel { get; set; }
+
+    [Parameter]
+    public EventCallback Close { get; set; }
+}

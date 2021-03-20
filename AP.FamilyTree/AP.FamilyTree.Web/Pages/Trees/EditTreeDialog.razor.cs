@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AP.FamilyTree.Web.PageModels.Interfaces;
 using AP.FamilyTree.Web.PageModels.Trees;
 
 namespace AP.FamilyTree.Web.Pages.Trees
 {
-    public class EditTreeDialogViewModel
+    public class EditTreeDialogViewModel : IEditModel
     {
-        public bool IsOpenDialog { get; set; } = false;
+        public bool DialogIsOpen { get; set; } = false;
         public TreeCardItemViewModel Model { get; set; }
         public bool IsConcurrencyError { get; set; }
+        public string ErrorString { get; set; }
     }
 }

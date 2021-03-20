@@ -39,7 +39,7 @@ namespace AP.FamilyTree.Web.Data.SharedService
                         ErrorLevel = (int)logLevel,
                         ErrorContext = (login_state.Length > 2 ? login_state[2] : "") + (exception?.StackTrace ?? ""),
                         BrowserInfo = login_state.Length > 2 ? login_state[2] : "",
-                        AppVersion = Globals.AppVersion
+                        AppVersion = Global.AppVersion
                     };
                     if (string.IsNullOrEmpty(message.ErrorMsg)) message.ErrorMsg = formatter(state, exception);
                     _pr.Enqueue(message);

@@ -9,7 +9,7 @@ namespace AP.FamilyTree.Db
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
-        TEntity Create(TEntity item);
+        TEntity Create(TEntity item, string operation = "");
         TEntity FindById(int id);
         IEnumerable<TEntity> Get();
         IQueryable<TEntity> GetQueryable();
