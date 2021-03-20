@@ -6,12 +6,24 @@
     <div style="border: 4px double black; text-align: center;">
         <h6>@Model.Name</h6>
         <h6>@Model.DateString</h6>
-        <i class="btn glyphicon glyphicon-eye-open" @onclick="@Open"></i>
+        <div class="row" style="text-align: center;">
+            <i class="btn glyphicon glyphicon-eye-open" @onclick="@Open"></i>
+            @if (Model.Edit)
+            {
+                <i class="btn glyphicon glyphicon-edit" @onclick="@(()=> Change.InvokeAsync(Model))"></i>
+            }
+            @if (Model.Admin)
+            {
+                <i class="btn glyphicon glyphicon-remove" @onclick="@(() => Remove.InvokeAsync(Model))"></i>
+            }
+        </div>
     </div>
 }
 
 @code {
     [Parameter] public TreeCardItemViewModel Model { get; set; }
+    [Parameter] public EventCallback<TreeCardItemViewModel> Change { get; set; }
+    [Parameter] public EventCallback<TreeCardItemViewModel> Remove { get; set; }
 
     //protected override async Task OnParametersSetAsync()
     //{

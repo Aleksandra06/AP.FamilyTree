@@ -8,6 +8,7 @@ using AP.FamilyTree.Db;
 using AP.FamilyTree.Db.Models;
 using AP.FamilyTree.Web.PageModels.Trees;
 using Microsoft.AspNetCore.Components.Authorization;
+using Org.BouncyCastle.Math.EC.Rfc7748;
 
 namespace AP.FamilyTree.Web.Data.Services.TreesServices
 {
@@ -66,7 +67,7 @@ namespace AP.FamilyTree.Web.Data.Services.TreesServices
                 list.Add(new TreeCardItemViewModel(mRepo.FindById(item.Item1), false, item.Item2));
             }
 
-           // var result = mRepo.Get().Select(r => new TreeCardItemViewModel(r)).ToList();
+            // var result = mRepo.Get().Select(r => new TreeCardItemViewModel(r)).ToList();
             return await Task.FromResult(list);
         }
 
@@ -90,6 +91,74 @@ namespace AP.FamilyTree.Web.Data.Services.TreesServices
             }
 
             return await Task.FromResult(result.Name);
+        }
+
+        public TreeCardItemViewModel Create(TreeCardItemViewModel item)
+        {
+            TreesModel model = new TreesModel();
+            model.EndDate = item.EndDate;
+            model.StartDate = item.StartDate;
+            model.Name = item.Name;
+            model.Surnames = item.Surnames;
+
+            var newTree = mRepo.Create(model);
+
+            mRepoUserTree.Create(new UserTree()
+            {
+                TreeId = newTree.Id,
+                UserId = mUserId
+            });
+
+            return new TreeCardItemViewModel(newTree, true, true);
+        }
+
+        public TreeCardItemViewModel Update(TreeCardItemViewModel item)
+        {
+            var model = mRepo.FindById(item.Id);
+            if (model == null)
+            {
+                return null;
+            }
+            model.EndDate = item.EndDate;
+            model.StartDate = item.StartDate;
+            model.Name = item.Name;
+            model.Surnames = item.Surnames;
+
+            var newItem = mRepo.Update(model);
+
+            return new TreeCardItemViewModel(model, item.Admin, item.Edit);
+        }
+
+        public TreeCardItemViewModel Reload(TreeCardItemViewModel item)
+        {
+            var model = mRepo.FindById(item.Id);
+            if (model == null)
+            {
+                return null;
+            }
+
+            var isAdmin = mRepoUserTree.Get().Any(x => x.TreeId == model.Id && x.UserId == mUserId);
+            var isEdit = isAdmin == true || (mRepoAccess.Get().Where(x => x.UserId == mUserId && x.TreeId == model.Id)?.FirstOrDefault()?.Edit ?? false);
+            return new TreeCardItemViewModel(model, isAdmin, isEdit);
+        }
+
+        public void Remove(TreeCardItemViewModel item)
+        {
+            var userTree = mRepoUserTree.Get(x => x.TreeId == item.Id && x.UserId == mUserId)?.FirstOrDefault();
+            var userTreeItem = mRepoUserTree.FindById(userTree.Id);
+            if (userTreeItem == null)
+            {
+                return;
+            }
+            mRepoUserTree.Remove(userTreeItem);
+
+            var model = mRepo.FindById(item.Id);
+            if (model == null)
+            {
+                return;
+            }
+
+            mRepo.Remove(model);
         }
     }
 }

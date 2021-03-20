@@ -32,8 +32,8 @@
         @*<span class="span-link" title="Realisierungskonzept: Autragserfassung">RK: Autragserfassung</span>*@
         @*<AuthorizeView>
             <Authorized>*@
-        <a class="nav-link" href="Counter" @onclick:preventDefault @onclick="@(()=>UriHelper.NavigateTo(UriHelper.BaseUri + "Counter", true))">
-            Kunden
+        <a class="nav-link" href="Counter" @onclick:preventDefault @onclick="@(()=>UriHelper.NavigateTo(UriHelper.BaseUri + "trees", true))">
+            Деревья
         </a>
         @*<a class="nav-link" href="Auftrag" @onclick:preventDefault @onclick="@(()=>UriHelper.NavigateTo(UriHelper.BaseUri + "Auftrag", true))">
                 Auftrag
@@ -54,7 +54,7 @@
     <div class="row align-items-center">
         <AuthorizeView>
             <Authorized>
-                <a class="pr-5" href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</a>
+                <a class="pr-5" href="Identity/Account/Manage">@context.User.Identity.Name!</a>
                 <form method="post" action="Identity/Account/LogOut">
                     <button type="submit" class="nav-link btn btn-link">Выйти</button>
                 </form>

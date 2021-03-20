@@ -7,7 +7,16 @@
     @foreach (var item in ModelList)
     {
         <div class="col-3">
-            <TreeCard Model="@item" />
+            <TreeCard Model="@item" Change="@Edit" Remove="@Remove" />
         </div>
     }
+    <div style="border: 4px double black; text-align: center;">
+        <h6>Новое дерево</h6>
+        <i class="btn btn-nav" @onclick="@CreateTree">Создать дерево</i>
+    </div>
 </div>
+
+@if (EditDialog?.IsOpenDialog == true)
+{
+    <EditTreeDialog ViewModel="@EditDialog" SaveItem="@Save" ReloadItem="@Reload" />
+}
