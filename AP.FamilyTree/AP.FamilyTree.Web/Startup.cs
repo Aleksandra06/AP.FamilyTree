@@ -20,6 +20,7 @@ using AP.FamilyTree.Mail;
 using AP.FamilyTree.Web.Data.Services;
 using AP.FamilyTree.Web.Data.Services.SystemPageServices;
 using AP.FamilyTree.Web.Data.Services.TreesServices;
+using AP.FamilyTree.Web.Data.Services.UserServices;
 using AP.FamilyTree.Web.Data.SharedService;
 using MatBlazor;
 using Microsoft.AspNetCore.Http;
@@ -77,7 +78,7 @@ namespace AP.FamilyTree.Web
 
             services.AddScoped<SystemPageService>();
             services.AddScoped<TreesService>();
-
+            services.AddScoped<UserService>();
 
             services.AddLogging();
         }

@@ -16,7 +16,6 @@ namespace AP.FamilyTree.Web.Pages.Trees
         protected List<TreeCardItemViewModel> Model { get; set; }
         protected TreeCardItemViewModel mCurrentItem;
         protected EditTreeDialogViewModel mEditViewModel = new EditTreeDialogViewModel();
-        protected bool mIsItemLoaded = true;
         protected override Task OnInitializedAsync()
         {
             mInformationDialog.Btn = "Ок";
@@ -144,8 +143,8 @@ namespace AP.FamilyTree.Web.Pages.Trees
             {
                 mEditViewModel.DialogIsOpen = false;
             }
-
         }
+
         protected override void Dispose(bool disposing)
         {
             Model?.Clear();

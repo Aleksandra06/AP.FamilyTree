@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -8,7 +7,6 @@ using AP.FamilyTree.Db;
 using AP.FamilyTree.Db.Models;
 using AP.FamilyTree.Web.PageModels.Trees;
 using Microsoft.AspNetCore.Components.Authorization;
-using Org.BouncyCastle.Math.EC.Rfc7748;
 
 namespace AP.FamilyTree.Web.Data.Services.TreesServices
 {

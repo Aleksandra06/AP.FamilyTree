@@ -29,6 +29,8 @@ namespace AP.FamilyTree.Web.PageModels
         protected InformarionDialogViewModel mInformationDialog = new InformarionDialogViewModel() { Btn = "Schließen" };
         private string mNameUserAndPage;
 
+        protected bool mIsItemLoaded = true;
+
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
