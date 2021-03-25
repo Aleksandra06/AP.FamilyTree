@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AP.FamilyTree.Web.Data;
 using AP.FamilyTree.Web.Data.Services.UserServices;
@@ -12,6 +13,8 @@ namespace AP.FamilyTree.Web.Pages.User
     {
         [Inject] public UserService Service { get; set; }
         protected UserItemViewModel Model { get; set; }
+        protected List<string> ErrorMessage { get; set; }
+        protected bool mFinishDialogIsOpen = false;
 
         protected override Task OnInitializedAsync()
         {
@@ -40,7 +43,11 @@ namespace AP.FamilyTree.Web.Pages.User
         {
             try
             {
-                Model = await Service.Save(Model);
+                ErrorMessage = await Service.Save(Model);
+                if (ErrorMessage == null || ErrorMessage?.Count == 0)
+                {
+                    mFinishDialogIsOpen = true;
+                }
                 StateHasChanged();
             }
             catch (Exception e)
@@ -51,6 +58,7 @@ namespace AP.FamilyTree.Web.Pages.User
         protected void CloseInformationDialog()
         {
             mInformationDialog.IsOpenDialog = false;
+            mInformationDialog.Btn = "Ок";
             //if (mEditViewModel?.DialogIsOpen == true)
             //{
             //    mEditViewModel.DialogIsOpen = false;

@@ -1,0 +1,36 @@
+﻿@page "/tree/{Id:int}"
+
+@using AP.FamilyTree.Web.Data.Services.TreesServices
+@using AP.FamilyTree.Web.Data
+
+@inject TreesService TreeService
+@inject NavigationManager UriHelper
+
+<h5>@Name</h5>
+<MatTabGroup bind-ActiveIndex="activeTabId">
+    <MatTab Id="0" Label="Дерево">
+        @*<TreeBuilding TreeId="Id" />*@
+    </MatTab>
+    @if (Dostup == DostupEnum.Edit || Dostup == DostupEnum.Admin)
+    {
+        <MatTab Id="1" Label="Редактирование">
+            <AP.FamilyTree.Web.Pages.Node.NodeTable TreeId="Id" />
+        </MatTab>
+    }
+</MatTabGroup>
+@code {
+    [Parameter] public int Id { get; set; }
+
+    private string Name { get; set; }
+    DostupEnum Dostup { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Dostup = TreeService.GetDostup(Id);
+        if (Dostup == DostupEnum.Not)
+        {
+            UriHelper.NavigateTo(UriHelper.BaseUri + "trees", true);
+        }
+        Name = await TreeService.GetNameById(Id);
+    }
+}

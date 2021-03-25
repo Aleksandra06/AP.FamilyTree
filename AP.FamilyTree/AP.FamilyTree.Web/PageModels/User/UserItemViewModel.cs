@@ -19,6 +19,5 @@ namespace AP.FamilyTree.Web.PageModels.User
         [Required(ErrorMessage = "Для поддверждения необходимо ввести действующий пароль.")]
         [DataType(DataType.Password)]
         public string OldPassword { get; set; } = "";
-        public List<string> ErrorList { get; set; }
     }
 }

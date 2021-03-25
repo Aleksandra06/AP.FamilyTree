@@ -69,11 +69,9 @@ namespace AP.FamilyTree.Web.Data.Services.UserServices
             return await Task.FromResult(model);
         }
 
-        public async Task<UserItemViewModel> Save(UserItemViewModel model)
+        public async Task<List<string>> Save(UserItemViewModel model)
         {
-            var changedEmail = model.Email;
-            string changedPassword = model.Password;
-            model.ErrorList = new List<string>();
+            var messageError = new List<string>();
             if (!string.IsNullOrEmpty(model.Password))
             {
                 var user = await mUserManager.FindByEmailAsync(mUserEmail);
@@ -81,26 +79,25 @@ namespace AP.FamilyTree.Web.Data.Services.UserServices
                 var result = await mUserManager.ChangePasswordAsync(user, model.OldPassword, model.Password);
                 if (!result.Succeeded)
                 {
-                    changedPassword = model.OldPassword;
                     foreach (var error in result.Errors)
                     {
-                        model.ErrorList.Add(error.Description);
+                        messageError.Add(error.Description);
                     }
                 }
             }
 
-            if (!string.IsNullOrEmpty(model.Email))
-            {
-                var user = await mUserManager.FindByEmailAsync(mUserEmail);
-                if (mSignInManager.CheckPasswordSignInAsync(user, model.OldPassword, false)?.Result.Succeeded == true ||
-                    mSignInManager.CheckPasswordSignInAsync(user, model.Password, false)?.Result.Succeeded == true)
+            if (string.IsNullOrEmpty(model.Email)) return await Task.FromResult(messageError);
+            
+                var user2 = await mUserManager.FindByEmailAsync(mUserEmail);
+                if (mSignInManager.CheckPasswordSignInAsync(user2, model.OldPassword, false)?.Result.Succeeded == true ||
+                    mSignInManager.CheckPasswordSignInAsync(user2, model.Password, false)?.Result.Succeeded == true)
                 {
-                    if (!model.Email.Equals(user.Email))
+                    if (!model.Email.Equals(user2.Email))
                     {
-                        user.Email = model.Email;
-                        user.UserName = model.Email;
-                        user.EmailConfirmed = true;
-                        var result = await mUserManager.UpdateAsync(user);
+                        user2.Email = model.Email;
+                        user2.UserName = model.Email;
+                        //user.EmailConfirmed = true;
+                        var result = await mUserManager.UpdateAsync(user2);
                         //var result = await mUserManager.SetEmailAsync(user, model.Email);
                         //var user2 = await mUserManager.FindByEmailAsync(model.Email);
                         //var result2 = await mUserManager.SetUserNameAsync(user2, mUserEmail);
@@ -108,36 +105,19 @@ namespace AP.FamilyTree.Web.Data.Services.UserServices
                         {
                             foreach (var error in result.Errors)
                             {
-                                model.ErrorList.Add(error.Description);
+                                messageError.Add(error.Description);
                             }
                         }
-                        else
-                        {
-                            changedEmail = model.Email;
-                            mUserEmail = model.Email;
-                        }
-
                     }
                 }
                 else
                 {
-                    model.ErrorList.Add("Неверен действующий пароль");
-                    return await GetUserModel();
+                    messageError.Add("Неверен действующий пароль");
                 }
-            }
+            
+            
 
-            if (model.ErrorList == null || model.ErrorList?.Count == 0)
-            {
-                var result = await mSignInManager.PasswordSignInAsync(changedEmail, changedPassword, false, false);
-            }
-
-            var newModel = await GetUserModel();
-            if (model.ErrorList != null && model.ErrorList?.Count > 0)
-            {
-                newModel.ErrorList = model.ErrorList;
-            }
-
-            return await Task.FromResult(newModel);
+            return await Task.FromResult(messageError);
         }
     }
 }

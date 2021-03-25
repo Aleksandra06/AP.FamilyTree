@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using AP.FamilyTree.Db;
 using AP.FamilyTree.Mail;
 using AP.FamilyTree.Web.Data.Services;
+using AP.FamilyTree.Web.Data.Services.NodeServices;
 using AP.FamilyTree.Web.Data.Services.SystemPageServices;
 using AP.FamilyTree.Web.Data.Services.TreesServices;
 using AP.FamilyTree.Web.Data.Services.UserServices;
@@ -79,6 +80,8 @@ namespace AP.FamilyTree.Web
             services.AddScoped<SystemPageService>();
             services.AddScoped<TreesService>();
             services.AddScoped<UserService>();
+            services.AddScoped<NodeService>();
+            services.AddScoped<HumanService>();
 
             services.AddLogging();
         }

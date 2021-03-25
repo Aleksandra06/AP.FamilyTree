@@ -158,5 +158,27 @@ namespace AP.FamilyTree.Web.Data.Services.TreesServices
 
             mRepo.Remove(model);
         }
+
+        public DostupEnum GetDostup(int id)
+        {
+            var isAdmin = mRepoUserTree.Get().Any(x => x.TreeId == id && x.UserId == mUserId);
+            if (isAdmin)
+            {
+                return DostupEnum.Admin;
+            }
+
+            var userTree = mRepoAccess.Get().Where(x => x.UserId == mUserId && x.TreeId == id);
+            if (userTree == null || userTree?.Count() == 0)
+            {
+                return DostupEnum.Not;
+            }
+
+            if (userTree.FirstOrDefault().Edit)
+            {
+                return DostupEnum.Edit;
+            }
+
+            return DostupEnum.Look;
+        }
     }
 }

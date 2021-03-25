@@ -18,8 +18,8 @@ namespace AP.FamilyTree.Db
         public DbSet<TreesModel> TreesDbSet { get; set; }
         public DbSet<UserTree> UserTreeDbSet { get; set; }
         public DbSet<Access> AccessDbSet { get; set; }
-        //public DbSet<HumanModel> HumanDbSet { get; set; }
-        //public DbSet<NodeModel> NodeDbSet { get; set; }
+        public DbSet<HumanModel> HumanDbSet { get; set; }
+        public DbSet<NodeModel> NodeDbSet { get; set; }
         DbSet<LogApplicationError> LogApplicationErrorDbset { get; set; }
     }
 }

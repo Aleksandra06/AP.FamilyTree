@@ -33,11 +33,11 @@
                     <InputText type="password" placeholder="Password" @bind-Value="@Model.ConfirmPassword" Class="form-control form-control-sm col-10" id="password" style="width: 200px;"></InputText>
                     <ValidationMessage For="@(() => Model.ConfirmPassword)" />
                 </div>
-                @if (Model.ErrorList?.Count > 0)
+                @if (ErrorMessage?.Count > 0)
                 {
-                    @foreach (var item in Model.ErrorList)
+                    @foreach (var mes in ErrorMessage)
                     {
-                        <div style="color: red;" class="row">@item</div>
+                        <div style="color: red;" class="row">@mes</div>
                     }
                 }
             </div>
@@ -46,6 +46,26 @@
         </EditForm>
     }
     <InformarionDialog ViewModel="@mInformationDialog" Close="@CloseInformationDialog" />
+
+    @if (mFinishDialogIsOpen)
+    {
+        <MatDialog @bind-IsOpen="@mFinishDialogIsOpen" CanBeClosed="false">
+            <MatDialogTitle Class="diHeader">
+                <h3>Изменение Email и пароля</h3>
+                <hr />
+            </MatDialogTitle>
+            <MatDialogContent>
+                <div class="d-flex flex-column justify-content-between h-100">
+                    <div style="max-width:400px;">
+                        Для принятия изменений повторите вход в систему
+                    </div>
+                    <form method="post" action="Identity/Account/LogOut">
+                        <button type="submit" class="btn btn-nav">Выйти</button>
+                    </form>
+                </div>
+            </MatDialogContent>
+        </MatDialog>
+    }
 }
 else
 {
