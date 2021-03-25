@@ -1,44 +1,58 @@
 ﻿@page "/node"
 @inherits NodeTableViewModel
 
-<i class="btn" @onclick="@Create">Создать</i>
-<table class="table table-sm col-12">
-    <thead>
-        <tr>
-            <!--<th>-->
-            @*<SortIcon Column="Nachname" Title="Nachname" Sort="@Sort"></SortIcon>*@
-            <!--</th>-->
-            <th>#</th>
-            <th>Имя</th>
-            <th>Фамилия</th>
-            <th>Отчество</th>
-            <th>Дата рождения</th>
-            <th>Дата смерти</th>
-            <th>Отец</th>
-            <th>Мать</th>
-            <th></th>
-        </tr>
-    </thead>
-    @if (Model != null)
-    {
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.NodeId</td>
-                <td>@item.Human.Name</td>
-                <td>@item.Human.Surname</td>
-                <td>@item.Human.MiddleName</td>
-                <td>@(item.Human.BirthDate != null ? item.Human.BirthDate?.ToShortDateString() : "")</td>
-                <td>@(item.Human.DeathDate != null ? item.Human.DeathDate?.ToShortDateString() : "")</td>
-                <td>@item.Mother?.Name</td>
-                <td>@item.Father?.Name</td>
-                <td><i class="btn glyphicon glyphicon-edit" @onclick="(() => EditNodeOpenDialog(item))" title="Редактирование"></i></td>
-            </tr>
-        }
-    }
-</table>
-
-@if (mEditViewModel.DialogIsOpen)
+@if (!IsFailed)
 {
-    <EditNodeDialog ViewModel="@mEditViewModel" SaveItem="@Save" />
+    @if (!mIsItemLoaded)
+    {
+        <span class="spinner-border spinner-border-sm centerSpinner" role="status" aria-hidden="true"></span>
+        <div class="overlay"></div>
+    }
+
+    <i class="btn" @onclick="@Create">Создать</i>
+    <table class="table table-sm col-12">
+        <thead>
+            <tr>
+                <!--<th>-->
+                @*<SortIcon Column="Nachname" Title="Nachname" Sort="@Sort"></SortIcon>*@
+                <!--</th>-->
+                <th>#</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Отчество</th>
+                <th>Дата рождения</th>
+                <th>Дата смерти</th>
+                <th>Отец</th>
+                <th>Мать</th>
+                <th></th>
+            </tr>
+        </thead>
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.NodeId</td>
+                    <td>@item.Human.Name</td>
+                    <td>@item.Human.Surname</td>
+                    <td>@item.Human.MiddleName</td>
+                    <td>@(item.Human.BirthDate != null ? item.Human.BirthDate?.ToShortDateString() : "")</td>
+                    <td>@(item.Human.DeathDate != null ? item.Human.DeathDate?.ToShortDateString() : "")</td>
+                    <td>@item.Mother?.Name</td>
+                    <td>@item.Father?.Name</td>
+                    <td><i class="btn glyphicon glyphicon-edit" @onclick="(() => EditNodeOpenDialog(item))" title="Редактирование"></i></td>
+                </tr>
+            }
+        }
+    </table>
+
+    @if (mEditViewModel.DialogIsOpen)
+    {
+        <EditNodeDialog ViewModel="@mEditViewModel" SaveItem="@Save" />
+    }
+    <InformarionDialog ViewModel="@mInformationDialog" Close="@CloseInformationDialog" />
+}
+else
+{
+    <ErrorComponent Model="@ErrorModel" />
 }

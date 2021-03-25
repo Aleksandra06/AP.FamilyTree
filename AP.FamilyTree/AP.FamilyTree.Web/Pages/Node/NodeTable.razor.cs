@@ -82,5 +82,22 @@ namespace AP.FamilyTree.Web.Pages.Node
                 ExceprionProcessing(e, FunctionModelEnum.Save, mCurrentItem, mEditViewModel);
             }
         }
+        protected void CloseInformationDialog()
+        {
+            mInformationDialog.IsOpenDialog = false;
+            if (mEditViewModel?.DialogIsOpen == true)
+            {
+                mEditViewModel.DialogIsOpen = false;
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            Model?.Clear();
+            Model = null;
+            mCurrentItem = null;
+            mEditViewModel = null;
+            Service = null;
+        }
     }
 }
