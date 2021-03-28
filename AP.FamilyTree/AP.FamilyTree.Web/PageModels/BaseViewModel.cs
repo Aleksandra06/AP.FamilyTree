@@ -53,6 +53,13 @@ namespace AP.FamilyTree.Web.PageModels
             var task = Task.Run(async () => await GetUserNameAsync());
             return task.Result;
         }
+
+        //public async Task<bool> IsSysAdminRole()
+        //{
+        //    var user = (await authenticationStateTask).User;
+        //    var isRole = user.IsInRole("Administrator");
+        //    return isRole;
+        //}
         public void Dispose()
         {
             Dispose(true);

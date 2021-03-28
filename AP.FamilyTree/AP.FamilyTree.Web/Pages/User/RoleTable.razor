@@ -1,0 +1,50 @@
+﻿@inherits RoleTableViewModel
+
+@if (!IsFailed)
+{
+    @if (!mIsItemLoaded)
+    {
+        <span class="spinner-border spinner-border-sm centerSpinner" role="status" aria-hidden="true"></span>
+        <div class="overlay"></div>
+    }
+
+    <h4>Роли</h4>
+    <table class="table table-sm col-12">
+        <thead>
+            <tr>
+                <th>
+                    <SortIcon Column="Login" Title="Login" Sort="@Sort"></SortIcon>
+                </th>
+                <th>
+                    <SortIcon Column="RoleName" Title="Role" Sort="@Sort"></SortIcon>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Login</td>
+                    <td>@item.RoleName</td>
+                    <td><i class="btn glyphicon glyphicon-edit" @onclick="(() => EditRole(item))" title="Редактирование"></i></td>
+                </tr>
+            }
+        }
+    </table>
+
+    @if (mEditViewModel.DialogIsOpen)
+    {
+        <EditRoleTable ViewModel="@mEditViewModel" SaveItem="@SaveRole" />
+    }
+    <InformarionDialog ViewModel="@mInformationDialog" Close="@CloseInformationDialog" />
+}
+else
+{
+    <ErrorComponent Model="@ErrorModel" />
+}
+
+@code {
+
+}

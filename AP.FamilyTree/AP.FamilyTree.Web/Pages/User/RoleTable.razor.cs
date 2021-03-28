@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AP.FamilyTree.Web.Data;
 using AP.FamilyTree.Web.Data.Services.UserServices;
@@ -9,14 +10,11 @@ using Microsoft.AspNetCore.Components;
 
 namespace AP.FamilyTree.Web.Pages.User
 {
-    public class PersonalOfficeViewModel : BaseViewModel
+    public class RoleTableViewModel : BaseViewModel
     {
         [Inject] public UserService Service { get; set; }
-        protected UserItemViewModel Model { get; set; }
-        protected List<string> ErrorMessage { get; set; }
-        protected bool mFinishDialogIsOpen = false;
-        protected bool IsSysAdminRole = false;
-
+        protected List<RoleItemViewModel> Model { get; set; } = new List<RoleItemViewModel>();
+        protected EditRoleTableViewModel mEditViewModel = new EditRoleTableViewModel();
         protected override Task OnInitializedAsync()
         {
             mInformationDialog.Btn = "Ок";
@@ -30,8 +28,7 @@ namespace AP.FamilyTree.Web.Pages.User
             {
                 try
                 {
-                    IsSysAdminRole = await Service.IsSysAdminRole();
-                    Model = await Service.GetUserModel();
+                    Model = await Service.GetUserRoles();
                     StateHasChanged();
                 }
                 catch (Exception e)
@@ -42,37 +39,42 @@ namespace AP.FamilyTree.Web.Pages.User
             }
         }
 
-        protected async Task SaveItem()
+        protected void EditRole(RoleItemViewModel item)
         {
-            try
-            {
-                ErrorMessage = await Service.Save(Model);
-                if (ErrorMessage == null || ErrorMessage?.Count == 0)
-                {
-                    mFinishDialogIsOpen = true;
-                }
-                StateHasChanged();
-            }
-            catch (Exception e)
-            {
-                ExceprionProcessing(e, FunctionModelEnum.OnAfterRenderAsync, null, null);
-                StateHasChanged();
-            }
+            mEditViewModel = new EditRoleTableViewModel();
+            mEditViewModel.Model = item;
+            mEditViewModel.DialogIsOpen = true;
         }
+
+        protected async Task SaveRole(RoleItemViewModel item)
+        {
+            var updateRole = await Service.UpdateRole(item);
+            var index = Model.FindIndex(x => x.Login == item.Login);
+            Model[index] = updateRole;
+            mEditViewModel.DialogIsOpen = false;
+        }
+
         protected void CloseInformationDialog()
         {
             mInformationDialog.IsOpenDialog = false;
             mInformationDialog.Btn = "Ок";
-            //if (mEditViewModel?.DialogIsOpen == true)
-            //{
-            //    mEditViewModel.DialogIsOpen = false;
-            //}
+            if (mEditViewModel?.DialogIsOpen == true)
+            {
+                mEditViewModel.DialogIsOpen = false;
+            }
         }
 
+        protected void Sort(KeyValuePair<string, string> pair)
+        {
+            Model = pair.Value == "desc" ? Model.OrderByDescending(x => x.GetType().GetProperty(pair.Key).GetValue(x, null)).ToList()
+                : Model.OrderBy(x => x.GetType().GetProperty(pair.Key).GetValue(x, null)).ToList();
+            StateHasChanged();
+        }
         protected override void Dispose(bool disposing)
         {
             Model = null;
             Service = null;
         }
+
     }
 }
