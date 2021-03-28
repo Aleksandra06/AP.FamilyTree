@@ -12,7 +12,7 @@ namespace AP.FamilyTree.Web.Pages.User
 {
     public class RoleTableViewModel : BaseViewModel
     {
-        [Inject] public UserService Service { get; set; }
+        [Inject] public RoleService Service { get; set; }
         protected List<RoleItemViewModel> Model { get; set; } = new List<RoleItemViewModel>();
         protected EditRoleTableViewModel mEditViewModel = new EditRoleTableViewModel();
         protected override Task OnInitializedAsync()

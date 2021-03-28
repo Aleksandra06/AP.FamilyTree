@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -8,7 +7,6 @@ using AP.FamilyTree.Db.Models;
 using AP.FamilyTree.Web.PageModels.User;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
-using NPOI.OpenXmlFormats.Wordprocessing;
 
 namespace AP.FamilyTree.Web.Data.Services.UserServices
 {
@@ -125,93 +123,6 @@ namespace AP.FamilyTree.Web.Data.Services.UserServices
 
 
             return await Task.FromResult(messageError);
-        }
-
-        public async Task<List<RoleItemViewModel>> GetUserRoles()
-        {
-            var users = mRepoUser.Get().ToList();
-            if (users == null)
-            {
-                return null;
-            }
-
-            List<RoleItemViewModel> list = new List<RoleItemViewModel>();
-            foreach (var user in users)
-            {
-                RoleItemViewModel item = new RoleItemViewModel();
-                var u = await mUserManager.FindByEmailAsync(user.Email);
-                var roles = await mUserManager.GetRolesAsync(u);
-                var roleName = roles?.FirstOrDefault();
-                if (!string.IsNullOrEmpty(roleName))
-                {
-                    var role = await mRoleManager.FindByNameAsync(roleName);
-                    item.RoleName = role.Name;
-                }
-                item.Login = user.Email;
-                list.Add(item);
-            }
-
-            return await Task.FromResult(list);
-        }
-
-        public async Task<RoleItemViewModel> UpdateRole(RoleItemViewModel model)
-        {
-            var users = await mUserManager.FindByEmailAsync(model.Login);
-            if (users == null)
-            {
-                return null;
-            }
-
-            var result = await mUserManager.AddToRoleAsync(users, model.RoleName);
-            if (result.Succeeded)
-            {
-                var newModel = new RoleItemViewModel();
-                newModel.Login = users.Email;
-                newModel.RoleName = model.RoleName;
-                return await Task.FromResult(newModel);
-            }
-            else
-            {
-                var newModel = await GetRoleItemViewModelByUserName(users.UserName);
-                return await Task.FromResult(newModel);
-            }
-        }
-
-        public async Task<RoleItemViewModel> GetRoleItemViewModelByUserName(string usersUserName)
-        {
-            RoleItemViewModel item = new RoleItemViewModel();
-            var u = await mUserManager.FindByEmailAsync(usersUserName);
-            var roles = await mUserManager.GetRolesAsync(u);
-            var roleName = roles?.FirstOrDefault();
-            if (!string.IsNullOrEmpty(roleName))
-            {
-                var role = await mRoleManager.FindByNameAsync(roleName);
-                item.RoleName = role.Name;
-            }
-            item.Login = u.Email;
-
-            return await Task.FromResult(item);
-        }
-        public async Task<List<string>> GetRoles()
-        {
-            var list = mContext.GetAllRolesSort();
-
-            return await Task.FromResult(list);
-        }
-
-        public async Task<bool> IsSysAdminRole()
-        {
-            var user = await mUserManager.FindByEmailAsync(mUserEmail);
-            var roles = await mUserManager.GetRolesAsync(user);
-            var roleName = roles?.FirstOrDefault();
-            if (roleName == "Administrator")
-            {
-                return await Task.FromResult(true);
-            }
-            else
-            {
-                return await Task.FromResult(false);
-            }
         }
     }
 }

@@ -12,6 +12,7 @@ namespace AP.FamilyTree.Web.Pages.User
     public class PersonalOfficeViewModel : BaseViewModel
     {
         [Inject] public UserService Service { get; set; }
+        [Inject] public RoleService ServiceRole { get; set; }
         protected UserItemViewModel Model { get; set; }
         protected List<string> ErrorMessage { get; set; }
         protected bool mFinishDialogIsOpen = false;
@@ -30,7 +31,7 @@ namespace AP.FamilyTree.Web.Pages.User
             {
                 try
                 {
-                    IsSysAdminRole = await Service.IsSysAdminRole();
+                    IsSysAdminRole = await ServiceRole.IsSysAdminRole();
                     Model = await Service.GetUserModel();
                     StateHasChanged();
                 }

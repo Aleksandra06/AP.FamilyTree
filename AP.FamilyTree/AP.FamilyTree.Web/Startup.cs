@@ -79,9 +79,10 @@ namespace AP.FamilyTree.Web
 
             services.AddScoped<SystemPageService>();
             services.AddScoped<TreesService>();
-            services.AddScoped<UserService>();
             services.AddScoped<NodeService>();
             services.AddScoped<HumanService>();
+            services.AddScoped<UserService>();
+            services.AddScoped<RoleService>();
 
             services.AddLogging();
         }
@@ -111,7 +112,7 @@ namespace AP.FamilyTree.Web
 
             app.UseEndpoints(endpoints =>
             {
-               // endpoints.MapControllers();
+                // endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
                 endpoints.MapControllerRoute("default", "{controller=Account}/{action=Index}/{id?}");
