@@ -49,7 +49,7 @@
 
     @if (mEditViewModel.DialogIsOpen)
     {
-        <EditNodeDialog ViewModel="@mEditViewModel" SaveItem="@Save" />
+        <EditNodeDialog ViewModel="@mEditViewModel" ReloadItem="@ReloadItem" SaveItem="@Save" />
     }
     <InformarionDialog ViewModel="@mInformationDialog" Close="@CloseInformationDialog" />
 }

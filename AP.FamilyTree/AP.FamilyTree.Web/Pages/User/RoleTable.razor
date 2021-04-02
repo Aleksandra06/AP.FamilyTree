@@ -36,7 +36,7 @@
 
     @if (mEditViewModel.DialogIsOpen)
     {
-        <EditRoleTable ViewModel="@mEditViewModel" SaveItem="@SaveRole" />
+        <EditRoleTable ViewModel="@mEditViewModel" SaveItem="@SaveRole"  ReloadItem="@ReloadItem"/>
     }
     <InformarionDialog ViewModel="@mInformationDialog" Close="@CloseInformationDialog" />
 }

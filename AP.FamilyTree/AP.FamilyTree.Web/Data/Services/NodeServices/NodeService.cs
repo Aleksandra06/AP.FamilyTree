@@ -100,5 +100,12 @@ namespace AP.FamilyTree.Web.Data.Services.NodeServices
                 NodeId = modelNode.Id
             };
         }
+
+        public NodeItemViewModel ReloadItem(NodeItemViewModel item)
+        {
+            var x = mNodeRepo.Reload(item.NodeId);
+            if (x == null) return null;
+            return ConvertAndGetData(x);
+        }
     }
 }

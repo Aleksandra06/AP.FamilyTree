@@ -65,6 +65,49 @@ namespace AP.FamilyTree.Web.Pages.User
             }
         }
 
+        public async Task ReloadItem(RoleItemViewModel item)
+        {
+            try
+            {
+                var reloadItem = await Service.ReloadItem(item);
+                if (reloadItem == null)
+                {
+                    Model.Remove(item);
+                    mInformationDialog.IsOpenDialog = true;
+                    mInformationDialog.Text = "Этот элемент был удален.";
+                    mInformationDialog.Title = "Обновление";
+                }
+                else
+                {
+                    reloadItem.IsRefreshed = false;
+
+                    if (mEditViewModel.DialogIsOpen)
+                    {
+                        mEditViewModel.Model = reloadItem;
+                    }
+
+                    var index = Model.FindIndex(x => x.Login == item.Login);
+                    if (string.IsNullOrEmpty(reloadItem.Login))
+                    {
+                        mEditViewModel.DialogIsOpen = false;
+                        Model.RemoveAt(index);
+                    }
+                    else
+                    {
+                        mEditViewModel.IsConcurrencyError = false;
+                        Model[index] = reloadItem;
+                    }
+                }
+
+                StateHasChanged();
+            }
+            catch (Exception e)
+            {
+                mCurrentItem = item;
+                ExceprionProcessing(e, FunctionModelEnum.Reload, mCurrentItem, mEditViewModel);
+            }
+        }
+
         protected void CloseInformationDialog()
         {
             mInformationDialog.IsOpenDialog = false;

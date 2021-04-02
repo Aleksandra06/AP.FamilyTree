@@ -126,5 +126,12 @@ namespace AP.FamilyTree.Web.Data.Services.UserServices
 
             mRepoAccess.Remove(item);
         }
+
+        public AccessItemViewModel ReloadItem(AccessItemViewModel item)
+        {
+            var x = mRepoAccess.Reload(item.Id);
+            if (x == null) return null;
+            return Convert(x);
+        }
     }
 }

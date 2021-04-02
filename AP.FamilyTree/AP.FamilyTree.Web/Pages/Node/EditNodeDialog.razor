@@ -17,14 +17,14 @@
                 <MatDialogTitle class="diHeader">
                     <h3>@(ViewModel.Model.NodeId > 0 ? "Изменение вершины #" + ViewModel.Model.NodeId : "Создание вершины")</h3>
                     <div class="btn-group">
-                        @*@if (ViewModel.IsConcurrencyError)
-                            {
-                                <span class="btn btn-nav btn-primary mr-1" @onclick="@(()=> ReloadItem.InvokeAsync(ViewModel.Model))">Reload</span>
-                            }
-                            else
-                            {*@
-                        <input type="submit" value="Сохранить" class="btn btn-nav btn-primary mr-1" style="float: right; background: darkgreen;" />
-                        @*}*@
+                        @if (ViewModel.IsConcurrencyError)
+                        {
+                            <span class="btn btn-nav btn-primary mr-1" @onclick="@(()=> ReloadItem.InvokeAsync(ViewModel.Model))">Reload</span>
+                        }
+                        else
+                        {
+                            <input type="submit" value="Сохранить" class="btn btn-nav btn-primary mr-1" style="float: right; background: darkgreen;" />
+                        }
                         <span class="btn btn-nav" @onclick="@(e => {ViewModel.DialogIsOpen = false;})">X</span>
                     </div>
                     <hr />
@@ -145,11 +145,12 @@ else
     [Parameter]
     public EventCallback<NodeItemViewModel> SaveItem { get; set; }
 
+    [Parameter]
+    public EventCallback<NodeItemViewModel> ReloadItem { get; set; }
+
     public List<PersonItemViewModel> MotherList { get; set; } = new List<PersonItemViewModel>();
     public List<PersonItemViewModel> FatherList { get; set; } = new List<PersonItemViewModel>();
 
-    //[Parameter]
-    //public EventCallback<NodeHumanItemViewModel> ReloadItem { get; set; }
 
     protected override Task OnInitializedAsync()
     {

@@ -144,5 +144,19 @@ namespace AP.FamilyTree.Web.Data.Services.UserServices
                 return await Task.FromResult(false);
             }
         }
+
+        public async Task<RoleItemViewModel> ReloadItem(RoleItemViewModel item)
+        {
+            var u = await mUserManager.FindByEmailAsync(item.Login);
+            var roles = await mUserManager.GetRolesAsync(u);
+            var roleName = roles?.FirstOrDefault();
+            if (!string.IsNullOrEmpty(roleName))
+            {
+                var role = await mRoleManager.FindByNameAsync(roleName);
+                item.RoleName = role.Name;
+            }
+            item.Login = u.Email;
+            return await Task.FromResult(item);
+        }
     }
 }

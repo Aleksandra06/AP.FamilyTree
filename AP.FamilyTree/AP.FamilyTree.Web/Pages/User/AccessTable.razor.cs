@@ -117,6 +117,49 @@ namespace AP.FamilyTree.Web.Pages.User
             }
         }
 
+        public void ReloadItem(AccessItemViewModel item)
+        {
+            try
+            {
+                var reloadItem = Service.ReloadItem(item);
+                if (reloadItem == null)
+                {
+                    Model.Remove(item);
+                    mInformationDialog.IsOpenDialog = true;
+                    mInformationDialog.Text = "Этот элемент был удален.";
+                    mInformationDialog.Title = "Обновление";
+                }
+                else
+                {
+                    reloadItem.IsRefreshed = false;
+
+                    if (mEditViewModel.DialogIsOpen)
+                    {
+                        mEditViewModel.Model = reloadItem;
+                    }
+
+                    var index = Model.FindIndex(x => x.Id == item.Id);
+                    if (reloadItem.Item == null)
+                    {
+                        mEditViewModel.DialogIsOpen = false;
+                        Model.RemoveAt(index);
+                    }
+                    else
+                    {
+                        mEditViewModel.IsConcurrencyError = false;
+                        Model[index] = reloadItem;
+                    }
+                }
+
+                StateHasChanged();
+            }
+            catch (Exception e)
+            {
+                mCurrentModel = item;
+                ExceprionProcessing(e, FunctionModelEnum.Reload, mCurrentModel, mEditViewModel);
+            }
+        }
+
         protected void CloseInformationDialog()
         {
             mInformationDialog.IsOpenDialog = false;

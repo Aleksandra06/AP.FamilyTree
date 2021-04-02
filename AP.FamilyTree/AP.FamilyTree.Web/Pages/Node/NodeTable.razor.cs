@@ -82,6 +82,49 @@ namespace AP.FamilyTree.Web.Pages.Node
                 ExceprionProcessing(e, FunctionModelEnum.Save, mCurrentItem, mEditViewModel);
             }
         }
+        public void ReloadItem(NodeItemViewModel item)
+        {
+            try
+            {
+                var reloadItem = Service.ReloadItem(item);
+                if (reloadItem == null)
+                {
+                    Model.Remove(item);
+                    mInformationDialog.IsOpenDialog = true;
+                    mInformationDialog.Text = "Этот элемент был удален.";
+                    mInformationDialog.Title = "Обновление";
+                }
+                else
+                {
+                    reloadItem.IsRefreshed = false;
+
+                    if (mEditViewModel.DialogIsOpen)
+                    {
+                        mEditViewModel.Model = reloadItem;
+                    }
+
+                    var index = Model.FindIndex(x => x.NodeId == item.NodeId);
+                    if (reloadItem.Item == null)
+                    {
+                        mEditViewModel.DialogIsOpen = false;
+                        Model.RemoveAt(index);
+                    }
+                    else
+                    {
+                        mEditViewModel.IsConcurrencyError = false;
+                        Model[index] = reloadItem;
+                    }
+                }
+
+                StateHasChanged();
+            }
+            catch (Exception e)
+            {
+                mCurrentItem = item;
+                ExceprionProcessing(e, FunctionModelEnum.Reload, mCurrentItem, mEditViewModel);
+            }
+        }
+
         protected void CloseInformationDialog()
         {
             mInformationDialog.IsOpenDialog = false;

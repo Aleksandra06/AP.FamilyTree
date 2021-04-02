@@ -47,7 +47,7 @@
 
     @if (mEditViewModel.DialogIsOpen)
     {
-        <EditAccessTable ViewModel="@mEditViewModel" SaveItem="@SaveAccess" />
+        <EditAccessTable ViewModel="@mEditViewModel" SaveItem="@SaveAccess" ReloadItem="@ReloadItem"/>
     }
     <ConfirmationDialog IsOpenConfirmation="@mConfirmDialogIsOpen" Answer="@Remove" />
 
