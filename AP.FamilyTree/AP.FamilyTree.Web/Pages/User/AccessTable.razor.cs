@@ -156,7 +156,7 @@ namespace AP.FamilyTree.Web.Pages.User
             catch (Exception e)
             {
                 mCurrentModel = item;
-                ExceprionProcessing(e, FunctionModelEnum.Reload, mCurrentModel, mEditViewModel);
+                ExceprionProcessing(e, FunctionModelEnum.Reload, mCurrentModel, mEditViewModel?.DialogIsOpen == true ? mEditViewModel : null);
             }
         }
 

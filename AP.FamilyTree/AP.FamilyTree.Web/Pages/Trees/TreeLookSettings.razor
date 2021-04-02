@@ -3,6 +3,8 @@
 @using AP.FamilyTree.Web.Data.Services.TreesServices
 @using AP.FamilyTree.Web.Data
 
+@inherits AP.FamilyTree.Web.PageModels.BaseViewModel
+
 @inject TreesService TreeService
 @inject NavigationManager UriHelper
 
@@ -18,6 +20,7 @@
         </MatTab>
     }
 </MatTabGroup>
+
 @code {
     [Parameter] public int Id { get; set; }
 
@@ -26,11 +29,18 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        Dostup = TreeService.GetDostup(Id);
-        if (Dostup == DostupEnum.Not)
+        try
         {
-            UriHelper.NavigateTo(UriHelper.BaseUri + "trees", true);
+            Dostup = TreeService.GetDostup(Id);
+            if (Dostup == DostupEnum.Not)
+            {
+                UriHelper.NavigateTo(UriHelper.BaseUri + "trees", true);
+            }
+            Name = await TreeService.GetNameById(Id);
         }
-        Name = await TreeService.GetNameById(Id);
+        catch (Exception e)
+        {
+            ExceprionProcessing(e, FunctionModelEnum.Other, null, null, "OnParametersSetAsync");
+        }
     }
 }

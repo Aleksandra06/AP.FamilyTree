@@ -132,7 +132,7 @@ namespace AP.FamilyTree.Web.Pages.Trees
             catch (Exception e)
             {
                 mCurrentItem = item;
-                ExceprionProcessing(e, FunctionModelEnum.Remove, mCurrentItem, mEditViewModel?.DialogIsOpen == true ? mEditViewModel : null);
+                ExceprionProcessing(e, FunctionModelEnum.Remove, mCurrentItem, null);
             }
         }
 

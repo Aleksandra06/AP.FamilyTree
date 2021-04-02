@@ -121,7 +121,7 @@ namespace AP.FamilyTree.Web.Pages.Node
             catch (Exception e)
             {
                 mCurrentItem = item;
-                ExceprionProcessing(e, FunctionModelEnum.Reload, mCurrentItem, mEditViewModel);
+                ExceprionProcessing(e, FunctionModelEnum.Reload, mCurrentItem, mEditViewModel?.DialogIsOpen == true ? mEditViewModel : null);
             }
         }
 
