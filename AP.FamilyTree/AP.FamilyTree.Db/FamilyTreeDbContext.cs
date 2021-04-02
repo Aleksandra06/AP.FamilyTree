@@ -26,13 +26,35 @@ namespace AP.FamilyTree.Db
         public DbSet<NodeModel> NodeDbSet { get; set; }
         public DbSet<ViewUserModel> ViewUserModelDbSet { get; set; }
         public DbSet<ViewName> ViewNameDbSet { get; set; }
+        public DbSet<ViewNameId> ViewNameIdDbSet { get; set; }
         DbSet<LogApplicationError> LogApplicationErrorDbset { get; set; }
 
         public List<string> GetAllRolesSort()
         {
             var sql = "select Name from AspNetRoles Order by Name";
             var result = ViewNameDbSet.FromSqlRaw(sql).ToList();
-            return result?.Select(x=> x.Name).ToList();
+            return result?.Select(x => x.Name).ToList();
+        }
+
+        public string GetTreeNameById(int userTreeId)
+        {
+            var sql = $"select Name from Trees where Id = {userTreeId}";
+            var result = ViewNameDbSet.FromSqlRaw(sql).SingleOrDefault();
+            return result?.Name;
+        }
+
+        public string GetUserEmailById(string userUserId)
+        {
+            var sql = $"select UserName Name from AspNetUsers where Id = '{userUserId}'";
+            var result = ViewNameDbSet.FromSqlRaw(sql).SingleOrDefault();
+            return result?.Name;
+        }
+
+        public List<ViewNameId> GetListTree(string userId)
+        {
+            var sql = $"select TreeId Id, Name from Trees tr, Access a where tr.Id = a.TreeId and AdminUserId = '{userId}'";
+            var result = ViewNameIdDbSet.FromSqlRaw(sql).ToList();
+            return result;
         }
     }
 }

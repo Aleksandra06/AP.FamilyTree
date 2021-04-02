@@ -1,0 +1,44 @@
+﻿@using MatBlazor
+<MatDialog @bind-IsOpen="@IsOpenConfirmation" CanBeClosed="false">
+    <MatDialogTitle Class="diHeader">
+        <h3>@Title</h3>
+        <hr />
+    </MatDialogTitle>
+    <MatDialogContent>
+        <div class="d-flex flex-column justify-content-between h-100">
+            <div style="max-width:400px;">
+                @Text
+            </div>
+            <div class="btn-group mt-4 row">
+                <div class="@(BtnYesClass) col-6" @onclick="@(()=> { Answer.InvokeAsync(true); IsOpenConfirmation = false; })">@BtnYes</div>
+                <div class="@(BtnNoClass) col-6" @onclick="@(()=> { Answer.InvokeAsync(false); IsOpenConfirmation = false; })">@BtnNo</div>
+            </div>
+        </div>
+    </MatDialogContent>
+</MatDialog>
+
+@code {
+    [Parameter]
+    public string Text { get; set; } = "Подвтердите удаление";
+
+    [Parameter]
+    public string Title { get; set; } = "Удаление";
+
+    [Parameter]
+    public string BtnYes { get; set; } = "Удалить";
+
+    [Parameter]
+    public string BtnNo { get; set; } = "Отмена";
+
+    [Parameter]
+    public bool IsOpenConfirmation { get; set; }
+
+    [Parameter]
+    public string BtnYesClass { get; set; } = "btn btn-outline-danger btn-nav";
+
+    [Parameter]
+    public string BtnNoClass { get; set; } = "btn btn-nav";
+
+    [Parameter]
+    public EventCallback<bool> Answer { get; set; }
+}

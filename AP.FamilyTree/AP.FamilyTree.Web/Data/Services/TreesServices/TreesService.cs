@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AP.FamilyTree.Db;
 using AP.FamilyTree.Db.Models;
+using AP.FamilyTree.Db.Views;
 using AP.FamilyTree.Web.PageModels.Trees;
 using Microsoft.AspNetCore.Components.Authorization;
 
@@ -15,8 +16,11 @@ namespace AP.FamilyTree.Web.Data.Services.TreesServices
         private readonly EFRepository<TreesModel> mRepo;
         private readonly EFRepository<UserTree> mRepoUserTree;
         private readonly EFRepository<Access> mRepoAccess;
+
         private string mUserName = "";
         private string mUserId;
+
+        private readonly FamilyTreeDbContext mContex;
         public TreesService(FamilyTreeDbContext context, AuthenticationStateProvider authenticationStateProvider)
         {
             var state = authenticationStateProvider.GetAuthenticationStateAsync().Result;
@@ -48,6 +52,7 @@ namespace AP.FamilyTree.Web.Data.Services.TreesServices
             mRepo = new EFRepository<TreesModel>(context);
             mRepoUserTree = new EFRepository<UserTree>(context);
             mRepoAccess = new EFRepository<Access>(context);
+            mContex = context;
         }
         public async Task<List<TreeCardItemViewModel>> GetAllForUser()
         {
@@ -179,6 +184,13 @@ namespace AP.FamilyTree.Web.Data.Services.TreesServices
             }
 
             return DostupEnum.Look;
+        }
+
+        public async Task<List<ViewNameId>> GetTreesForThisUser()
+        {
+            var list = mContex.GetListTree(mUserId);
+
+            return await Task.FromResult(list);
         }
     }
 }

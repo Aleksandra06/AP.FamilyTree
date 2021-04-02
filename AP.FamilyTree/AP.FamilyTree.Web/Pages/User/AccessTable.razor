@@ -1,0 +1,56 @@
+﻿@inherits AccessTableViewModel
+
+@if (!IsFailed)
+{
+    @if (!mIsItemLoaded)
+    {
+        <span class="spinner-border spinner-border-sm centerSpinner" role="status" aria-hidden="true"></span>
+        <div class="overlay"></div>
+    }
+
+    <h3>Доступ</h3>
+    <i class="btn" @onclick="@Create">Создать</i>
+    <table class="table table-sm col-12">
+        <thead>
+            <tr>
+                <th>
+                    <SortIcon Column="Login" Title="Login" Sort="@Sort"></SortIcon>
+                </th>
+                <th>
+                    <SortIcon Column="RoleName" Title="Role" Sort="@Sort"></SortIcon>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.TreeName</td>
+                    <td>@item.UserEmail</td>
+                    <td>
+                        @if (item.Edit)
+                        {
+                            <i class="glyphicon glyphicon-ok"></i>
+                        }
+                    </td>
+                    <td><i class="btn glyphicon glyphicon-edit" @onclick="(() => EditAccess(item))" title="Редактирование"></i></td>
+                    <td><i class="btn glyphicon glyphicon-remove" @onclick="(() => DeleteOpenDialog(item))" title="Удаление"></i></td>
+                </tr>
+            }
+        }
+    </table>
+
+    @if (mEditViewModel.DialogIsOpen)
+    {
+        <EditAccessTable ViewModel="@mEditViewModel" SaveItem="@SaveAccess" />
+    }
+    <ConfirmationDialog IsOpenConfirmation="@mConfirmDialogIsOpen" Answer="@DeleteByAnswer" />
+
+    <InformarionDialog ViewModel="@mInformationDialog" Close="@CloseInformationDialog" />
+}
+else
+{
+    <ErrorComponent Model="@ErrorModel" />
+}

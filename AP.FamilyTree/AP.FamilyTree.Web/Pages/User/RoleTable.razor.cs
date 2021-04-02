@@ -18,7 +18,7 @@ namespace AP.FamilyTree.Web.Pages.User
         protected override Task OnInitializedAsync()
         {
             mInformationDialog.Btn = "Ок";
-            SetPageName("PersonalOffice");
+            SetPageName("RoleTable");
             return base.OnInitializedAsync();
         }
         protected override async Task OnAfterRenderAsync(bool firstRender)

@@ -41,6 +41,7 @@
                     <td>@item.Mother?.Name</td>
                     <td>@item.Father?.Name</td>
                     <td><i class="btn glyphicon glyphicon-edit" @onclick="(() => EditNodeOpenDialog(item))" title="Редактирование"></i></td>
+                    <td><i class="btn glyphicon glyphicon-remove" @onclick="(() => EditNodeOpenDialog(item))" title="Удаление"></i></td>
                 </tr>
             }
         }

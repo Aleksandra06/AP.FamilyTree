@@ -83,6 +83,7 @@ namespace AP.FamilyTree.Web
             services.AddScoped<HumanService>();
             services.AddScoped<UserService>();
             services.AddScoped<RoleService>();
+            services.AddScoped<AccessService>();
 
             services.AddLogging();
         }
