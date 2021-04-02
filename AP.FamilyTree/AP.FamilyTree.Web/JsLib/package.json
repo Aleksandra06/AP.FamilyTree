@@ -1,0 +1,29 @@
+{
+  "dependencies": {
+    "basic": "^2.0.3",
+    "basicprimitives": "^6.3.0",
+    "core-js": "^3.10.0",
+    "css-loader": "^5.2.0",
+    "primitives": "^0.1.8",
+    "url-loader": "^4.1.1"
+  },
+  "name": "jslib",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {
+    "@babel/core": "^7.13.14",
+    "@babel/preset-env": "^7.13.12",
+    "babel-loader": "^8.2.2",
+    "mini-css-extract-plugin": "^1.4.0",
+    "webpack": "^5.30.0",
+    "webpack-cli": "^4.6.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode production"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

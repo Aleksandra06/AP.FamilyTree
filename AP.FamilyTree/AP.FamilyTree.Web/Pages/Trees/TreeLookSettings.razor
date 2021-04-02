@@ -11,7 +11,7 @@
 <h5>@Name</h5>
 <MatTabGroup bind-ActiveIndex="activeTabId">
     <MatTab Id="0" Label="Дерево">
-        @*<TreeBuilding TreeId="Id" />*@
+        <AP.FamilyTree.Web.Pages.Tree.Tree TreeId="Id" />
     </MatTab>
     @if (Dostup == DostupEnum.Edit || Dostup == DostupEnum.Admin)
     {
