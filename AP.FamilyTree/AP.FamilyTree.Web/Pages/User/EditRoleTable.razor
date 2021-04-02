@@ -1,60 +1,71 @@
-﻿@using AP.FamilyTree.Web.PageModels.Trees
-@using AP.FamilyTree.Web.PageModels.User
-@using MatBlazor
+﻿@using AP.FamilyTree.Web.PageModels.User
 @using AP.FamilyTree.Web.Data.Services.UserServices
 @inject RoleService Service
+@inherits AP.FamilyTree.Web.PageModels.BaseViewModel
 
-<div>
-    <MatDialog @bind-IsOpen="@ViewModel.DialogIsOpen" CanBeClosed="false">
-        <EditForm Model="ViewModel.Model" OnValidSubmit="@(() => { SaveItem.InvokeAsync(ViewModel.Model); })">
-            <MatDialogTitle class="diHeader">
-                <h3>@ViewModel.Model.Login</h3>
-                <div class="btn-group">
-                    @if (ViewModel.IsConcurrencyError)
-                    {
-                        <span class="btn btn-nav btn-primary mr-1" @onclick="@(()=> ReloadItem.InvokeAsync(ViewModel.Model))">Reload</span>
-                    }
-                    else
-                    {
-                        <input type="submit" value="Speichern" class="btn btn-nav btn-primary mr-1" style="float: right; background: darkgreen;" />
-                    }
-                    <span class="btn btn-nav" @onclick="@(e => {ViewModel.DialogIsOpen = false;})">X</span>
-                </div>
-                <hr />
-            </MatDialogTitle>
-            <MatDialogContent>
-                <DataAnnotationsValidator />
-                <div style="width: 1500px; display: block; height: 700px;">
-                    <div class="form-group row mb-1">
-                        <label for="MotherId" class="col-1 pl-0">Роль</label>
-                        <select class="form-control form-control-sm ml-0" style="width:300px;" @bind="@ViewModel.Model.RoleName">
-                            @if (string.IsNullOrEmpty(ViewModel.Model.RoleName))
-                            {
-                                <option value="0" selected="selected">--</option>
-                            }
-                            else
-                            {
-                                <option value="0">--</option>
-                            }
-                            @foreach (var x in RoleList)
-                            {
-                                if (ViewModel.Model.RoleName == x)
+@if (!IsFailed)
+{
+    @if (!mIsItemLoaded)
+    {
+        <span class="spinner-border spinner-border-sm centerSpinner" role="status" aria-hidden="true"></span>
+        <div class="overlay"></div>
+    }
+    <div>
+        <MatDialog @bind-IsOpen="@ViewModel.DialogIsOpen" CanBeClosed="false">
+            <EditForm Model="ViewModel.Model" OnValidSubmit="@(() => { SaveItem.InvokeAsync(ViewModel.Model); })">
+                <MatDialogTitle class="diHeader">
+                    <h3>@ViewModel.Model.Login</h3>
+                    <div class="btn-group">
+                        @if (ViewModel.IsConcurrencyError)
+                        {
+                            <span class="btn btn-nav btn-primary mr-1" @onclick="@(()=> ReloadItem.InvokeAsync(ViewModel.Model))">Reload</span>
+                        }
+                        else
+                        {
+                            <input type="submit" value="Speichern" class="btn btn-nav btn-primary mr-1" style="float: right; background: darkgreen;" />
+                        }
+                        <span class="btn btn-nav" @onclick="@(e => {ViewModel.DialogIsOpen = false;})">X</span>
+                    </div>
+                    <hr />
+                </MatDialogTitle>
+                <MatDialogContent>
+                    <DataAnnotationsValidator />
+                    <div style="width: 1500px; display: block; height: 700px;">
+                        <div class="form-group row mb-1">
+                            <label for="MotherId" class="col-1 pl-0">Роль</label>
+                            <select class="form-control form-control-sm ml-0" style="width:300px;" @bind="@ViewModel.Model.RoleName">
+                                @if (string.IsNullOrEmpty(ViewModel.Model.RoleName))
                                 {
-                                    <option value="@x" selected="selected">@x</option>
+                                    <option value="0" selected="selected">--</option>
                                 }
                                 else
                                 {
-                                    <option value="@x">@x</option>
+                                    <option value="0">--</option>
                                 }
-                            }
-                        </select>
-                        <ValidationMessage For="@(() => ViewModel.Model.RoleName)" />
+                                @foreach (var x in mRoleList)
+                                {
+                                    if (ViewModel.Model.RoleName == x)
+                                    {
+                                        <option value="@x" selected="selected">@x</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@x">@x</option>
+                                    }
+                                }
+                            </select>
+                            <ValidationMessage For="@(() => ViewModel.Model.RoleName)" />
+                        </div>
                     </div>
-                </div>
-            </MatDialogContent>
-        </EditForm>
-    </MatDialog>
-</div>
+                </MatDialogContent>
+            </EditForm>
+        </MatDialog>
+    </div>
+}
+else
+{
+    <ErrorComponent Model="@ErrorModel" />
+}
 
 @code {
     [Parameter]
@@ -66,10 +77,10 @@
     [Parameter]
     public EventCallback<RoleItemViewModel> ReloadItem { get; set; }
 
-    private List<string> RoleList = new List<string>();
+    private List<string> mRoleList = new List<string>();
 
     protected override async Task OnParametersSetAsync()
     {
-        RoleList = await Service.GetRoles();
+        mRoleList = await Service.GetRoles();
     }
 }

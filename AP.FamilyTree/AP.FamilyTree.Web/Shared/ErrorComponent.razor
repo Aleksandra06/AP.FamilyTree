@@ -1,15 +1,8 @@
-﻿@using MatBlazor
-@using Microsoft.AspNetCore.Http
-@using System.Net.Http
-@using System.Net.Http.Headers
-@using AP.FamilyTree.Web.Data.Models
-@using Newtonsoft.Json
-@inject HttpClient Http
-@inject NavigationManager UriHelper
+﻿@inject NavigationManager UriHelper
 
 <MatDialog @bind-IsOpen="@Model.IsOpen" CanBeClosed="false">
     <MatDialogTitle Class="diHeader">
-        <h3>Info zum aufgetretenen Systemfehler</h3>
+        <h3>Информация о произошедшей системной ошибке</h3>
         <div class="btn-group">
             <button class="btn btn-nav" type="button" @onclick="@CloseDialog">
                 <i class="glyphicon glyphicon-remove"></i>
@@ -19,28 +12,10 @@
     </MatDialogTitle>
     <MatDialogContent>
         <div class="h-100">
-            @if (!IsSendMessage)
-            {
-                <div>
-                    <h3 class="d-inline-block">Exception: </h3><span style="color: red">@Model.ErrorMessage</span>
-                </div>
-                <EditForm Model="@ModelMsg" OnValidSubmit="@SendMessage">
-                    <div>
-                        <DataAnnotationsValidator />
-                        <label>Bitte teilen Sie uns nützliche Fehlerdetails mit, die über die Fehlermeldung hinausgehen.</label>
-                        <InputTextArea @bind-Value="@ModelMsg.ErrorMsgUser" class="form-control" rows="4" style="width: 100%;"></InputTextArea>
-                    </div>
-                    <div class="btn-group mt-4 float-right">
-                        <button type="submit" class="btn btn-outline-primary btn-nav">Senden</button>
-                    </div>
-                </EditForm>
-            }
-            else
-            {
-                <div>
-                    Vielen Dank für Ihre Nachricht, sie wurde erfolgreich übermittelt.
-                </div>
-            }
+            <div>
+                <h3 class="d-inline-block">Исключение: </h3><span style="color: red">@Model.ErrorMessage</span>
+            </div>
+            <label>В скором времени ошибка будет исправлена.</label>
         </div>
     </MatDialogContent>
 </MatDialog>
@@ -52,30 +27,14 @@
     [Parameter]
     public ErrorComponentViewModel Model { get; set; }
 
-    public LogMessageEntry ModelMsg { get; set; }
-    private bool IsSendMessage { get; set; } = false;
     private string MainUrl { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        ModelMsg = new LogMessageEntry();
-        ModelMsg.ErrorMsg = Model.ErrorMessage;
-        ModelMsg.ErrorContext = Model.ErrorContext;
         MainUrl = UriHelper.BaseUri;
     }
 
-    private async void SendMessage()
-    {
-        var authState = await authenticationStateTask;
-        var user = authState.User;
-        ModelMsg.UserData = !user.Identity.IsAuthenticated ? "Unknown" : user.Identity.Name;
-        var dataAsString = JsonConvert.SerializeObject(ModelMsg);
-        var content = new StringContent(dataAsString);
-        content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-        await Http.PostAsync(UriHelper.BaseUri + "Message/SendMessage", content);
-        IsSendMessage = true;
-        StateHasChanged();
-    }
+
     private void CloseDialog()
     {
         Model.IsOpen = false;

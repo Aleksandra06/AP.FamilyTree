@@ -14,10 +14,13 @@
         <thead>
             <tr>
                 <th>
-                    <SortIcon Column="Login" Title="Login" Sort="@Sort"></SortIcon>
+                    <SortIcon Column="Login" Title="Дерево" Sort="@Sort"></SortIcon>
                 </th>
                 <th>
-                    <SortIcon Column="RoleName" Title="Role" Sort="@Sort"></SortIcon>
+                    <SortIcon Column="RoleName" Title="Пользователь" Sort="@Sort"></SortIcon>
+                </th>
+                <th title="Редактирование разрешено">
+                    <SortIcon Column="Edit" Title="Редактирование" Sort="@Sort"></SortIcon>
                 </th>
                 <th></th>
             </tr>
@@ -36,7 +39,7 @@
                         }
                     </td>
                     <td><i class="btn glyphicon glyphicon-edit" @onclick="(() => EditAccess(item))" title="Редактирование"></i></td>
-                    <td><i class="btn glyphicon glyphicon-remove" @onclick="(() => DeleteOpenDialog(item))" title="Удаление"></i></td>
+                    <td><i class="btn glyphicon glyphicon-remove remove" @onclick="(() => RemoveOpenDialog(item))" title="Удаление"></i></td>
                 </tr>
             }
         }
@@ -46,7 +49,7 @@
     {
         <EditAccessTable ViewModel="@mEditViewModel" SaveItem="@SaveAccess" />
     }
-    <ConfirmationDialog IsOpenConfirmation="@mConfirmDialogIsOpen" Answer="@DeleteByAnswer" />
+    <ConfirmationDialog IsOpenConfirmation="@mConfirmDialogIsOpen" Answer="@Remove" />
 
     <InformarionDialog ViewModel="@mInformationDialog" Close="@CloseInformationDialog" />
 }

@@ -216,3 +216,7 @@ h4 {
 .mdc-dialog .mdc-dialog__title {
     border: none;
 }
+
+.remove {
+    color: red;
+}

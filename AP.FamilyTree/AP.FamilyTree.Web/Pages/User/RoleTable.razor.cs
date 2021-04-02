@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AP.FamilyTree.Web.Data;
+using AP.FamilyTree.Web.Data.Exceptions;
 using AP.FamilyTree.Web.Data.Services.UserServices;
 using AP.FamilyTree.Web.PageModels;
 using AP.FamilyTree.Web.PageModels.User;
@@ -14,6 +15,7 @@ namespace AP.FamilyTree.Web.Pages.User
     {
         [Inject] public RoleService Service { get; set; }
         protected List<RoleItemViewModel> Model { get; set; } = new List<RoleItemViewModel>();
+        protected RoleItemViewModel mCurrentItem;
         protected EditRoleTableViewModel mEditViewModel = new EditRoleTableViewModel();
         protected override Task OnInitializedAsync()
         {
@@ -41,17 +43,27 @@ namespace AP.FamilyTree.Web.Pages.User
 
         protected void EditRole(RoleItemViewModel item)
         {
+            mCurrentItem = item;
             mEditViewModel = new EditRoleTableViewModel();
-            mEditViewModel.Model = item;
+            mEditViewModel.Model = mCurrentItem;
             mEditViewModel.DialogIsOpen = true;
         }
 
         protected async Task SaveRole(RoleItemViewModel item)
         {
-            var updateRole = await Service.UpdateRole(item);
-            var index = Model.FindIndex(x => x.Login == item.Login);
-            Model[index] = updateRole;
-            mEditViewModel.DialogIsOpen = false;
+            try
+            {
+                var updateRole = await Service.UpdateRole(item);
+                var index = Model.FindIndex(x => x.Login == item.Login);
+                Model[index] = updateRole;
+                mEditViewModel.DialogIsOpen = false;
+                StateHasChanged();
+            }
+            catch (Exception e)
+            {
+                ExceprionProcessing(e, FunctionModelEnum.Other, mCurrentItem, mEditViewModel, "SaveRole");
+                StateHasChanged();
+            }
         }
 
         protected void CloseInformationDialog()

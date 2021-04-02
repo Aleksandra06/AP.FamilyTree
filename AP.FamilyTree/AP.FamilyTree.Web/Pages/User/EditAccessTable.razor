@@ -5,64 +5,76 @@
 @inject TreesService Service
 @inherits AP.FamilyTree.Web.PageModels.BaseViewModel
 
-<div>
-    <MatDialog @bind-IsOpen="@ViewModel.DialogIsOpen" CanBeClosed="false">
-        <EditForm Model="ViewModel.Model" OnValidSubmit="@(() => { SaveItem.InvokeAsync(ViewModel.Model); })">
-            <MatDialogTitle class="diHeader">
-                <h3>@(ViewModel.Model.Id > 0 ? $"Редактирование доступа {ViewModel.Model.UserEmail} к дереву {ViewModel.Model.TreeName}" : "Создание доступа")</h3>
-                <div class="btn-group">
-                    @if (ViewModel.IsConcurrencyError)
-                    {
-                        <span class="btn btn-nav btn-primary mr-1" @onclick="@(()=> ReloadItem.InvokeAsync(ViewModel.Model))">Reload</span>
-                    }
-                    else
-                    {
-                        <input type="submit" value="Speichern" class="btn btn-nav btn-primary mr-1" style="float: right; background: darkgreen;" />
-                    }
-                    <span class="btn btn-nav" @onclick="@(e => {ViewModel.DialogIsOpen = false;})">X</span>
-                </div>
-                <hr />
-            </MatDialogTitle>
-            <MatDialogContent>
-                <DataAnnotationsValidator />
-                <div style="width: 600px; display: block;">
-                    @if (ViewModel.Model.Id == 0)
-                    {
-                        <div class="form-group row mb-1">
-                            <label for="UserEmail" class="col-3 pl-0">Имя пользователя</label>
-                            <InputText @bind-Value="@ViewModel.Model.UserEmail" Class="form-control form-control-sm col-9" id="UserEmail"></InputText>
-                            <ValidationMessage For="@(() => ViewModel.Model.UserEmail)" />
-                        </div>
-                        <div class="form-group row mb-1">
-                            <label for="TreeId" class="col-3 pl-0">Дерево</label>
-                            <select class="form-control form-control-sm ml-0 col-9" @bind="@ViewModel.Model.TreeId">
-                                @foreach (var x in TreeList)
-                                {
-                                    if (ViewModel.Model.TreeId == x.Id)
-                                    {
-                                        <option value="@x.Id" selected="selected">@x.Name</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@x.Id">@x.Name</option>
-                                    }
-                                }
-                            </select>
-                            <ValidationMessage For="@(() => ViewModel.Model.TreeId)" />
-                        </div>
-                    }
-                    <div class="form-group row mb-1">
-                        <label for="Edit" class="col-3 pl-0">Разрешено редактирование</label>
-                        <div class="text-left">
-                            <InputCheckbox @bind-Value="@ViewModel.Model.Edit" Class="form-control form-control-sm col-9 p-0" id="Edit"></InputCheckbox>
-                        </div>
-                        <ValidationMessage For="@(() => ViewModel.Model.Edit)" />
+@if (!IsFailed)
+{
+    @if (!mIsItemLoaded)
+    {
+        <span class="spinner-border spinner-border-sm centerSpinner" role="status" aria-hidden="true"></span>
+        <div class="overlay"></div>
+    }
+    <div>
+        <MatDialog @bind-IsOpen="@ViewModel.DialogIsOpen" CanBeClosed="false">
+            <EditForm Model="ViewModel.Model" OnValidSubmit="@(() => { SaveItem.InvokeAsync(ViewModel.Model); })">
+                <MatDialogTitle class="diHeader">
+                    <h3>@(ViewModel.Model.Id > 0 ? $"Редактирование доступа {ViewModel.Model.UserEmail} к дереву {ViewModel.Model.TreeName}" : "Создание доступа")</h3>
+                    <div class="btn-group">
+                        @if (ViewModel.IsConcurrencyError)
+                        {
+                            <span class="btn btn-nav btn-primary mr-1" @onclick="@(()=> ReloadItem.InvokeAsync(ViewModel.Model))">Reload</span>
+                        }
+                        else
+                        {
+                            <input type="submit" value="Speichern" class="btn btn-nav btn-primary mr-1" style="float: right; background: darkgreen;" />
+                        }
+                        <span class="btn btn-nav" @onclick="@(e => {ViewModel.DialogIsOpen = false;})">X</span>
                     </div>
-                </div>
-            </MatDialogContent>
-        </EditForm>
-    </MatDialog>
-</div>
+                    <hr />
+                </MatDialogTitle>
+                <MatDialogContent>
+                    <DataAnnotationsValidator />
+                    <div style="width: 600px; display: block;">
+                        @if (ViewModel.Model.Id == 0)
+                        {
+                            <div class="form-group row mb-1">
+                                <label for="UserEmail" class="col-3 pl-0">Имя пользователя</label>
+                                <InputText @bind-Value="@ViewModel.Model.UserEmail" Class="form-control form-control-sm col-9" id="UserEmail"></InputText>
+                                <ValidationMessage For="@(() => ViewModel.Model.UserEmail)" />
+                            </div>
+                            <div class="form-group row mb-1">
+                                <label for="TreeId" class="col-3 pl-0">Дерево</label>
+                                <select class="form-control form-control-sm ml-0 col-9" @bind="@ViewModel.Model.TreeId">
+                                    @foreach (var x in mTreeList)
+                                    {
+                                        if (ViewModel.Model.TreeId == x.Id)
+                                        {
+                                            <option value="@x.Id" selected="selected">@x.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@x.Id">@x.Name</option>
+                                        }
+                                    }
+                                </select>
+                                <ValidationMessage For="@(() => ViewModel.Model.TreeId)" />
+                            </div>
+                        }
+                        <div class="form-group row mb-1">
+                            <label for="Edit" class="col-3 pl-0">Разрешено редактирование</label>
+                            <div class="text-left">
+                                <InputCheckbox @bind-Value="@ViewModel.Model.Edit" Class="form-control form-control-sm col-9 p-0" id="Edit"></InputCheckbox>
+                            </div>
+                            <ValidationMessage For="@(() => ViewModel.Model.Edit)" />
+                        </div>
+                    </div>
+                </MatDialogContent>
+            </EditForm>
+        </MatDialog>
+    </div>
+}
+else
+{
+    <ErrorComponent Model="@ErrorModel" />
+}
 
 @code {
     [Parameter]
@@ -74,16 +86,16 @@
     [Parameter]
     public EventCallback<AccessItemViewModel> ReloadItem { get; set; }
 
-    private List<ViewNameId> TreeList = new List<ViewNameId>();
+    private List<ViewNameId> mTreeList = new List<ViewNameId>();
 
     protected override async Task OnParametersSetAsync()
     {
         try
         {
-            TreeList = await Service.GetTreesForThisUser();
-            if (ViewModel.Model.Id == 0 && TreeList.Count > 0)
+            mTreeList = await Service.GetTreesForThisUser();
+            if (ViewModel.Model.Id == 0 && mTreeList.Count > 0)
             {
-                ViewModel.Model.TreeId = TreeList.FirstOrDefault().Id;
+                ViewModel.Model.TreeId = mTreeList.FirstOrDefault().Id;
             }
         }
         catch (Exception e)

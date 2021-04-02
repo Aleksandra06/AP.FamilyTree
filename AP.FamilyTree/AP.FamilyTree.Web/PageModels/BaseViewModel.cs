@@ -89,7 +89,7 @@ namespace AP.FamilyTree.Web.PageModels
 
         protected void CatchException(Exception e, string additionalInfo)
         {
-            Logger.LogError(e, $"158*Error: {additionalInfo}*{browserInfo}");
+            Logger.LogError(e, $"{GetUserName()}*Error: {additionalInfo}*{browserInfo}");
             ExceptionOther(e);
         }
 
@@ -105,7 +105,7 @@ namespace AP.FamilyTree.Web.PageModels
                 {
                     mInformationDialog.IsOpenDialog = true;
                     mInformationDialog.Text = message;
-                    mInformationDialog.Title = "Aktualisierung fehlgeschlagen";
+                    mInformationDialog.Title = "Обновление данных";
                 }
                 else
                 {
@@ -153,13 +153,13 @@ namespace AP.FamilyTree.Web.PageModels
             {
                 mInformationDialog.IsOpenDialog = true;//remove
                 mInformationDialog.Text = Global.ExceptionText[ExeptionTypeEnum.RemoveItem];
-                mInformationDialog.Title = "Löschen fehlgeschlagen";
+                mInformationDialog.Title = "Удаление";
             }
             else
             {
                 mInformationDialog.IsOpenDialog = true;
-                mInformationDialog.Text = "Fehler beim Aktualisieren der Datenbank";
-                mInformationDialog.Title = "Aktualisierung fehlgeschlagen";
+                mInformationDialog.Text = "Ошибка базы данных. Обновите свои данные и попробуйте еще раз.";
+                mInformationDialog.Title = "Обновление не удалось";
             }
             StateHasChanged();
         }
