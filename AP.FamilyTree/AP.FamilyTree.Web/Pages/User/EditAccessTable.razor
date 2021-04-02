@@ -88,6 +88,13 @@ else
 
     private List<ViewNameId> mTreeList = new List<ViewNameId>();
 
+    protected override Task OnInitializedAsync()
+    {
+        mInformationDialog.Btn = "Ок";
+        SetPageName("EditAccessTable");
+        return base.OnInitializedAsync();
+    }
+
     protected override async Task OnParametersSetAsync()
     {
         try

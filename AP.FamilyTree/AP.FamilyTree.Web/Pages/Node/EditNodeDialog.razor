@@ -1,132 +1,142 @@
-﻿@using MatBlazor
-@using AP.FamilyTree.Web.PageModels.Node
+﻿@using AP.FamilyTree.Web.PageModels.Node
 @using AP.FamilyTree.Web.Data
 @using AP.FamilyTree.Web.Data.Services.NodeServices
-@using Microsoft.Extensions.DependencyInjection
-
+@inherits AP.FamilyTree.Web.PageModels.BaseViewModel
 @inject HumanService Service
 
-<div>
-    <MatDialog @bind-IsOpen="@ViewModel.DialogIsOpen" CanBeClosed="false">
-        <EditForm Model="ViewModel.Model" OnValidSubmit="@(() => { SaveItem.InvokeAsync(ViewModel.Model); })">
-            <MatDialogTitle class="diHeader">
-                <h3>@(ViewModel.Model.NodeId > 0 ? "Изменение вершины #" + ViewModel.Model.NodeId : "Создание вершины")</h3>
-                <div class="btn-group">
-                    @*@if (ViewModel.IsConcurrencyError)
-                        {
-                            <span class="btn btn-nav btn-primary mr-1" @onclick="@(()=> ReloadItem.InvokeAsync(ViewModel.Model))">Reload</span>
-                        }
-                        else
-                        {*@
-                    <input type="submit" value="Сохранить" class="btn btn-nav btn-primary mr-1" style="float: right; background: darkgreen;" />
-                    @*}*@
-                    <span class="btn btn-nav" @onclick="@(e => {ViewModel.DialogIsOpen = false;})">X</span>
-                </div>
-                <hr />
-            </MatDialogTitle>
-            <MatDialogContent>
-                <DataAnnotationsValidator />
-                <div style="width: 1000px; display: block; height: 700px;">
-                    <div class="form-group row mb-1">
-                        <label for="Name" class="col-1 pl-0">Имя</label>
-                        <InputText @bind-Value="@ViewModel.Model.Human.Name" Class="form-control form-control-sm col-9" id="Name"></InputText>
-                        <ValidationMessage For="@(() => ViewModel.Model.Human.Name)" />
-                    </div>
-                    <div class="form-group row mb-1">
-                        <label for="Surname" class="col-1 pl-0">Фамилия</label>
-                        <InputText @bind-Value="@ViewModel.Model.Human.Surname" Class="form-control form-control-sm col-9" id="Surname"></InputText>
-                        <ValidationMessage For="@(() => ViewModel.Model.Human.Surname)" />
-                    </div>
-                    <div class="form-group row mb-1">
-                        <label for="MiddleName" class="col-1 pl-0">Отчество</label>
-                        <InputText @bind-Value="@ViewModel.Model.Human.MiddleName" Class="form-control form-control-sm col-9" id="MiddleName"></InputText>
-                        <ValidationMessage For="@(() => ViewModel.Model.Human.MiddleName)" />
-                    </div>
-                    <div class="form-group row mb-1">
-                        <label for="MotherId" class="col-1 pl-0">Пол</label>
-                        <select class="form-control form-control-sm ml-0" style="width:300px;" @bind="@ViewModel.Model.Human.Gender">
-                            @foreach (GenderEnum x in Enum.GetValues(typeof(GenderEnum)))
+@if (!IsFailed)
+{
+    @if (!mIsItemLoaded)
+    {
+        <span class="spinner-border spinner-border-sm centerSpinner" role="status" aria-hidden="true"></span>
+        <div class="overlay"></div>
+    }
+    <div>
+        <MatDialog @bind-IsOpen="@ViewModel.DialogIsOpen" CanBeClosed="false">
+            <EditForm Model="ViewModel.Model" OnValidSubmit="@(() => { SaveItem.InvokeAsync(ViewModel.Model); })">
+                <MatDialogTitle class="diHeader">
+                    <h3>@(ViewModel.Model.NodeId > 0 ? "Изменение вершины #" + ViewModel.Model.NodeId : "Создание вершины")</h3>
+                    <div class="btn-group">
+                        @*@if (ViewModel.IsConcurrencyError)
                             {
-                                @if (x == GenderEnum.Man)
-                                {
-                                    if (ViewModel.Model.Human.Gender == x.GetHashCode())
-                                    {
-                                        <option value="@x.GetHashCode()" selected="selected">Мужской</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@x.GetHashCode()">Мужской</option>
-                                    }
-                                }
-                                else
-                                {
-                                    if (ViewModel.Model.Human.Gender == x.GetHashCode())
-                                    {
-                                        <option value="@x.GetHashCode()" selected="selected">Женский</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@x.GetHashCode()">Женский</option>
-                                    }
-                                }
+                                <span class="btn btn-nav btn-primary mr-1" @onclick="@(()=> ReloadItem.InvokeAsync(ViewModel.Model))">Reload</span>
                             }
-                        </select>
-                        <ValidationMessage For="@(() => ViewModel.Model.Human.Gender)" />
+                            else
+                            {*@
+                        <input type="submit" value="Сохранить" class="btn btn-nav btn-primary mr-1" style="float: right; background: darkgreen;" />
+                        @*}*@
+                        <span class="btn btn-nav" @onclick="@(e => {ViewModel.DialogIsOpen = false;})">X</span>
                     </div>
-                    <div class="form-group row mb-1">
-                        <label for="MotherId" class="col-1 pl-0">Мать</label>
-                        <select class="form-control form-control-sm ml-0" style="width:300px;" @bind="@ViewModel.Model.MotherId">
-                            <option value="0">--</option>
-                            @foreach (var x in MotherList)
-                            {
-                                if (ViewModel.Model.MotherId == x.Id)
-                                {
-                                    <option value="@x.Id" selected="selected">@x.Name @x.MiddleName @x.Surname</option>
-                                }
-                                else
-                                {
-                                    <option value="@x.Id">@x.Name @x.MiddleName @x.Surname</option>
-                                }
-                            }
-                        </select>
-                        <ValidationMessage For="@(() => ViewModel.Model.MotherId)" />
-                    </div>
-                    <div class="form-group row mb-1">
-                        <label for="MotherId" class="col-1 pl-0">Отец</label>
-                        <select class="form-control form-control-sm ml-0" style="width:300px;" @bind="@ViewModel.Model.FatherId">
-                            <option value="0">--</option>
-                            @foreach (var x in FatherList)
-                            {
-                                if (ViewModel.Model.FatherId == x.Id)
-                                {
-                                    <option value="@x.Id" selected="selected">@x.Name @x.MiddleName @x.Surname</option>
-                                }
-                                else
-                                {
-                                    <option value="@x.Id">@x.Name @x.MiddleName @x.Surname</option>
-                                }
-                            }
-                        </select>
-                        <ValidationMessage For="@(() => ViewModel.Model.FatherId)" />
-                    </div>
-
-                    @*<div class="form-group row mb-1">
-                            <label for="KoModul" class="col-3 pl-0">KoModul</label>
-                            <InputNumber @bind-Value="@ViewModel.Model.KoModul" Class="form-control form-control-sm col-9" id="KoModul"></InputNumber>
-                            <ValidationMessage For="@(() => ViewModel.Model.KoModul)" />
+                    <hr />
+                </MatDialogTitle>
+                <MatDialogContent>
+                    <DataAnnotationsValidator />
+                    <div style="width: 1000px; display: block; height: 700px;">
+                        <div class="form-group row mb-1">
+                            <label for="Name" class="col-1 pl-0">Имя</label>
+                            <InputText @bind-Value="@ViewModel.Model.Human.Name" Class="form-control form-control-sm col-9" id="Name"></InputText>
+                            <ValidationMessage For="@(() => ViewModel.Model.Human.Name)" />
                         </div>
                         <div class="form-group row mb-1">
-                            <label for="aktiv" class="col-3 pl-0">Aktiv</label>
-                            <div class="text-left">
-                                <InputCheckbox @bind-Value="@ViewModel.Model.aktiv" Class="form-control form-control-sm col-9 p-0" id="IsSerienbrief"></InputCheckbox>
+                            <label for="Surname" class="col-1 pl-0">Фамилия</label>
+                            <InputText @bind-Value="@ViewModel.Model.Human.Surname" Class="form-control form-control-sm col-9" id="Surname"></InputText>
+                            <ValidationMessage For="@(() => ViewModel.Model.Human.Surname)" />
+                        </div>
+                        <div class="form-group row mb-1">
+                            <label for="MiddleName" class="col-1 pl-0">Отчество</label>
+                            <InputText @bind-Value="@ViewModel.Model.Human.MiddleName" Class="form-control form-control-sm col-9" id="MiddleName"></InputText>
+                            <ValidationMessage For="@(() => ViewModel.Model.Human.MiddleName)" />
+                        </div>
+                        <div class="form-group row mb-1">
+                            <label for="MotherId" class="col-1 pl-0">Пол</label>
+                            <select class="form-control form-control-sm ml-0" style="width:300px;" @bind="@ViewModel.Model.Human.Gender">
+                                @foreach (GenderEnum x in Enum.GetValues(typeof(GenderEnum)))
+                                {
+                                    @if (x == GenderEnum.Man)
+                                    {
+                                        if (ViewModel.Model.Human.Gender == x.GetHashCode())
+                                        {
+                                            <option value="@x.GetHashCode()" selected="selected">Мужской</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@x.GetHashCode()">Мужской</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (ViewModel.Model.Human.Gender == x.GetHashCode())
+                                        {
+                                            <option value="@x.GetHashCode()" selected="selected">Женский</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@x.GetHashCode()">Женский</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                            <ValidationMessage For="@(() => ViewModel.Model.Human.Gender)" />
+                        </div>
+                        <div class="form-group row mb-1">
+                            <label for="MotherId" class="col-1 pl-0">Мать</label>
+                            <select class="form-control form-control-sm ml-0" style="width:300px;" @bind="@ViewModel.Model.MotherId">
+                                <option value="0">--</option>
+                                @foreach (var x in MotherList)
+                                {
+                                    if (ViewModel.Model.MotherId == x.Id)
+                                    {
+                                        <option value="@x.Id" selected="selected">@x.Name @x.MiddleName @x.Surname</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@x.Id">@x.Name @x.MiddleName @x.Surname</option>
+                                    }
+                                }
+                            </select>
+                            <ValidationMessage For="@(() => ViewModel.Model.MotherId)" />
+                        </div>
+                        <div class="form-group row mb-1">
+                            <label for="MotherId" class="col-1 pl-0">Отец</label>
+                            <select class="form-control form-control-sm ml-0" style="width:300px;" @bind="@ViewModel.Model.FatherId">
+                                <option value="0">--</option>
+                                @foreach (var x in FatherList)
+                                {
+                                    if (ViewModel.Model.FatherId == x.Id)
+                                    {
+                                        <option value="@x.Id" selected="selected">@x.Name @x.MiddleName @x.Surname</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@x.Id">@x.Name @x.MiddleName @x.Surname</option>
+                                    }
+                                }
+                            </select>
+                            <ValidationMessage For="@(() => ViewModel.Model.FatherId)" />
+                        </div>
+
+                        @*<div class="form-group row mb-1">
+                                <label for="KoModul" class="col-3 pl-0">KoModul</label>
+                                <InputNumber @bind-Value="@ViewModel.Model.KoModul" Class="form-control form-control-sm col-9" id="KoModul"></InputNumber>
+                                <ValidationMessage For="@(() => ViewModel.Model.KoModul)" />
                             </div>
-                            <ValidationMessage For="@(() => ViewModel.Model.aktiv)" />
-                        </div>*@
-                </div>
-            </MatDialogContent>
-        </EditForm>
-    </MatDialog>
-</div>
+                            <div class="form-group row mb-1">
+                                <label for="aktiv" class="col-3 pl-0">Aktiv</label>
+                                <div class="text-left">
+                                    <InputCheckbox @bind-Value="@ViewModel.Model.aktiv" Class="form-control form-control-sm col-9 p-0" id="IsSerienbrief"></InputCheckbox>
+                                </div>
+                                <ValidationMessage For="@(() => ViewModel.Model.aktiv)" />
+                            </div>*@
+                    </div>
+                </MatDialogContent>
+            </EditForm>
+        </MatDialog>
+    </div>
+}
+else
+{
+    <ErrorComponent Model="@ErrorModel" />
+}
 
 @code {
     [Parameter]
@@ -140,23 +150,40 @@
 
     //[Parameter]
     //public EventCallback<NodeHumanItemViewModel> ReloadItem { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        mInformationDialog.Btn = "Ок";
+        SetPageName("EditNodeTable");
+        return base.OnInitializedAsync();
+    }
+
     protected override async Task OnParametersSetAsync()
     {
-        MotherList = Service.GetBySettings(GenderEnum.Woman, ViewModel.Model.TreeId);
-        FatherList = Service.GetBySettings(GenderEnum.Man, ViewModel.Model.TreeId);
-        var index = MotherList.FindIndex(x => x.Id == ViewModel.Model.HumanId);
-        if (index >= 0)
+        try
         {
-            MotherList.RemoveAt(index);
-        }
-        else
-        {
-            index = FatherList.FindIndex(x => x.Id == ViewModel.Model.HumanId);
+            MotherList = Service.GetBySettings(GenderEnum.Woman, ViewModel.Model.TreeId);
+            FatherList = Service.GetBySettings(GenderEnum.Man, ViewModel.Model.TreeId);
+            var index = MotherList.FindIndex(x => x.Id == ViewModel.Model.HumanId);
             if (index >= 0)
             {
-                FatherList.RemoveAt(index);
+                MotherList.RemoveAt(index);
+            }
+            else
+            {
+                index = FatherList.FindIndex(x => x.Id == ViewModel.Model.HumanId);
+                if (index >= 0)
+                {
+                    FatherList.RemoveAt(index);
+                }
             }
         }
+        catch (Exception e)
+        {
+            ExceprionProcessing(e, FunctionModelEnum.Other, null, null, "OnParametersSetAsync");
+            StateHasChanged();
+        }
     }
+}
 
 }

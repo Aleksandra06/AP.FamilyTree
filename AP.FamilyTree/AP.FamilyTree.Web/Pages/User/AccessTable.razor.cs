@@ -43,15 +43,17 @@ namespace AP.FamilyTree.Web.Pages.User
 
         protected void EditAccess(AccessItemViewModel item)
         {
+            mCurrentModel = item;
             mEditViewModel = new EditAccessTableViewModel();
-            mEditViewModel.Model = item;
+            mEditViewModel.Model = mCurrentModel;
             mEditViewModel.DialogIsOpen = true;
         }
 
         protected void Create()
         {
+            mCurrentModel = new AccessItemViewModel();
             mEditViewModel = new EditAccessTableViewModel();
-            mEditViewModel.Model = new AccessItemViewModel();
+            mEditViewModel.Model = mCurrentModel;
             mEditViewModel.DialogIsOpen = true;
         }
 
@@ -81,7 +83,7 @@ namespace AP.FamilyTree.Web.Pages.User
             }
             catch (Exception e)
             {
-                ExceprionProcessing(e, FunctionModelEnum.Save, null, null);
+                ExceprionProcessing(e, FunctionModelEnum.Save, mCurrentModel, mEditViewModel);
                 StateHasChanged();
             }
         }
@@ -104,7 +106,7 @@ namespace AP.FamilyTree.Web.Pages.User
             }
             catch (Exception e)
             {
-                ExceprionProcessing(e, FunctionModelEnum.Remove, null, null);
+                ExceprionProcessing(e, FunctionModelEnum.Remove, mCurrentModel, null);
                 StateHasChanged();
             }
             finally

@@ -1,5 +1,6 @@
 ﻿@using AP.FamilyTree.Web.PageModels.User
 @using AP.FamilyTree.Web.Data.Services.UserServices
+@using AP.FamilyTree.Web.Data
 @inject RoleService Service
 @inherits AP.FamilyTree.Web.PageModels.BaseViewModel
 
@@ -79,8 +80,24 @@ else
 
     private List<string> mRoleList = new List<string>();
 
+    protected override Task OnInitializedAsync()
+    {
+        mInformationDialog.Btn = "Ок";
+        SetPageName("EditRoleTable");
+        return base.OnInitializedAsync();
+    }
+
     protected override async Task OnParametersSetAsync()
     {
-        mRoleList = await Service.GetRoles();
+        try
+        {
+            mRoleList = await Service.GetRoles();
+        }
+        catch (Exception e)
+        {
+            ExceprionProcessing(e, FunctionModelEnum.Other, null, null, "OnParametersSetAsync");
+            StateHasChanged();
+        }
     }
+
 }
