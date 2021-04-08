@@ -82,9 +82,9 @@ namespace AP.FamilyTree.Web.Data.Services.NodeServices
             modelHuman = mHumanRepo.Update(modelHuman);
 
             var modelNode = mNodeRepo.FindById(item.NodeId);
-            modelNode.FatherId = item.Father.Id;
+            modelNode.FatherId = item.FatherId;
             modelNode.IsActiv = item.IsActiv;
-            modelNode.MotherId = item.Mother.Id;
+            modelNode.MotherId = item.MotherId;
             modelNode = mNodeRepo.Update(modelNode);
 
             return new NodeItemViewModel()

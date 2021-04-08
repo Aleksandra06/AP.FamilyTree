@@ -20,4 +20,8 @@
     <ProjectReference Include="..\AP.FamilyTree.Mail\AP.FamilyTree.Mail.csproj" />
   </ItemGroup>
 
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="npm install" WorkingDirectory="JsLib" />
+    <Exec Command="npm run build" WorkingDirectory="JsLib" />
+  </Target>
 </Project>
