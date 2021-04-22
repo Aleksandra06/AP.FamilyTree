@@ -63,7 +63,8 @@ window.Test = {
                 parents: parents[i],
                 title: names[i],
                 description: dates[i],
-                image: photos.a
+                image: photos.a,
+                link: "https://www.basicprimitives.com/reactusecases/firstorganizationalchart"
             });
         }
         //var items = [
@@ -145,6 +146,8 @@ window.Test = {
         options.normalItemsInterval = 10;
         options.dotItemsInterval = 10;
         options.lineItemsInterval = 4;
+        //options.hasSelectorCheckbox = primitives.Enabled.True;
+        
 
         control = FamDiagram(document.getElementById("basicdiagram"), options);
 

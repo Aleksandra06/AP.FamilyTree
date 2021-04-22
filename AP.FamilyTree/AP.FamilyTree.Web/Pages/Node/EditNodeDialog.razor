@@ -48,7 +48,7 @@
                             <ValidationMessage For="@(() => ViewModel.Model.Human.MiddleName)" />
                         </div>
                         <div class="form-group row mb-1">
-                            <label for="MotherId" class="col-1 pl-0">Пол</label>
+                            <label for="Gender" class="col-1 pl-0">Пол</label>
                             <select class="form-control form-control-sm ml-0" style="width:300px;" @bind="@ViewModel.Model.Human.Gender">
                                 @foreach (GenderEnum x in Enum.GetValues(typeof(GenderEnum)))
                                 {
@@ -79,42 +79,55 @@
                             <ValidationMessage For="@(() => ViewModel.Model.Human.Gender)" />
                         </div>
                         <div class="form-group row mb-1">
-                            <label for="MotherId" class="col-1 pl-0">Мать</label>
-                            <select class="form-control form-control-sm ml-0" style="width:300px;" @bind="@ViewModel.Model.MotherId">
-                                <option value="0">--</option>
-                                @foreach (var x in MotherList)
-                                {
-                                    if (ViewModel.Model.MotherId == x.Id)
+                            <label for="MotherIdToString" class="col-1 pl-0">Мать</label>
+                            <InputSelect @bind-Value="@ViewModel.Model.MotherIdToString" Class="form-control form-control-sm col-9" id="MotherId">
+                                @if (ViewModel.Model.MotherId == 0)
                                     {
-                                        <option value="@x.Id" selected="selected">@x.Name @x.MiddleName @x.Surname</option>
+                                    <option value="0" selected="selected">--</option>
                                     }
                                     else
                                     {
-                                        <option value="@x.Id">@x.Name @x.MiddleName @x.Surname</option>
+                                    <option value="0">--</option>
                                     }
-                                }
-                            </select>
+                                @foreach (var x in MotherList)
+                                    {
+                                        if (ViewModel.Model.MotherId == x.Id)
+                                        {
+                                        <option value="@x.Id" selected="selected">@x.Name @x.MiddleName @x.Surname</option>
+                                        }
+                                        else
+                                        {
+                                        <option value="@x.Id">@x.Name @x.MiddleName @x.Surname</option>
+                                        }
+                                    }
+                            </InputSelect>
                             <ValidationMessage For="@(() => ViewModel.Model.MotherId)" />
                         </div>
                         <div class="form-group row mb-1">
-                            <label for="MotherId" class="col-1 pl-0">Отец</label>
-                            <select class="form-control form-control-sm ml-0" style="width:300px;" @bind="@ViewModel.Model.FatherId">
-                                <option value="0">--</option>
-                                @foreach (var x in FatherList)
-                                {
-                                    if (ViewModel.Model.FatherId == x.Id)
+                            <label for="FatherId" class="col-1 pl-0">Отец</label>
+                            <InputSelect @bind-Value="@ViewModel.Model.FatherIdToString" Class="form-control form-control-sm col-9" id="FatherId">
+                                @if (ViewModel.Model.FatherId == 0)
                                     {
-                                        <option value="@x.Id" selected="selected">@x.Name @x.MiddleName @x.Surname</option>
+                                    <option value="0" selected="selected">--</option>
                                     }
                                     else
                                     {
-                                        <option value="@x.Id">@x.Name @x.MiddleName @x.Surname</option>
+                                    <option value="0">--</option>
                                     }
-                                }
-                            </select>
+                                @foreach (var x in FatherList)
+                                    {
+                                        if (ViewModel.Model.FatherId == x.Id)
+                                        {
+                                        <option value="@x.Id" selected="selected">@x.Name @x.MiddleName @x.Surname</option>
+                                        }
+                                        else
+                                        {
+                                        <option value="@x.Id">@x.Name @x.MiddleName @x.Surname</option>
+                                        }
+                                    }
+                            </InputSelect>
                             <ValidationMessage For="@(() => ViewModel.Model.FatherId)" />
                         </div>
-
                         @*<div class="form-group row mb-1">
                                 <label for="KoModul" class="col-3 pl-0">KoModul</label>
                                 <InputNumber @bind-Value="@ViewModel.Model.KoModul" Class="form-control form-control-sm col-9" id="KoModul"></InputNumber>
@@ -185,6 +198,4 @@ else
             StateHasChanged();
         }
     }
-}
-
 }

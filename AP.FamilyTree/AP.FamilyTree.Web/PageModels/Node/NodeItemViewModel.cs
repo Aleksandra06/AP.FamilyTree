@@ -50,16 +50,27 @@ namespace AP.FamilyTree.Web.PageModels.Node
                 _item.MotherId = value;
             }
         }
-        public int? FatherId
+
+        public string MotherIdToString
         {
             get
             {
-                return _item.FatherId;
+                return MotherId != null ? MotherId.ToString() : "";
             }
             set
             {
-                _item.FatherId = value;
+                MotherId = int.Parse(value);
             }
+        }
+        public int? FatherId
+        {
+            get => _item.FatherId;
+            set => _item.FatherId = value;
+        }
+        public string FatherIdToString
+        {
+            get => FatherId != null ? FatherId.ToString() : "";
+            set => FatherId = int.Parse(value);
         }
         public bool IsDeleted
         {
