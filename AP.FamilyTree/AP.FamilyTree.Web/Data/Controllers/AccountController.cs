@@ -74,13 +74,13 @@ namespace AP.FamilyTree.Web.Data.Controllers
                         }
                     }
                 }
-
-                return View(model);
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, "AccountController" + $"*{browserInfo}");
             }
+
+            return View(model);
         }
 
         [HttpGet]
@@ -123,13 +123,13 @@ namespace AP.FamilyTree.Web.Data.Controllers
                         }
                     }
                 }
-                return View(model);
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, "AccountController" + $"*{browserInfo}");
                 throw ex;
             }
+            return View(model);
         }
 
         [HttpGet]
@@ -170,14 +170,13 @@ namespace AP.FamilyTree.Web.Data.Controllers
                     MailingService.SendMessage(message);
                     return View("ForgotPasswordConfirmation");
                 }
-
-                return View(model);
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, "AccountController" + $"*{browserInfo}");
                 throw ex;
             }
+            return View(model);
         }
 
         [HttpGet]
@@ -217,14 +216,13 @@ namespace AP.FamilyTree.Web.Data.Controllers
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
-
-                return View(model);
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, "AccountController" + $"*{browserInfo}");
                 throw ex;
             }
+            return View(model);
         }
     }
 }
