@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using AP.FamilyTree.Web.Data.Models;
 using AP.FamilyTree.Web.Data.Services;
 using AP.FamilyTree.Web.Globals;
@@ -6,6 +7,8 @@ using AP.FamilyTree.Web.PageModels.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.JSInterop;
 
 namespace AP.FamilyTree.Web.Data.Controllers
 {
@@ -14,11 +17,15 @@ namespace AP.FamilyTree.Web.Data.Controllers
         private MailingService MailingService;
         private SignInManager<IdentityUser> mSignInManager;
         private readonly UserManager<IdentityUser> mUserManager;
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, MailingService service)
+        private ILogger Logger;
+        protected string browserInfo = string.Empty;
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, MailingService service, ILogger logger, IJSRuntime js)
         {
             mUserManager = userManager;
             mSignInManager = signInManager;
             MailingService = service;
+            Logger = logger;
+            browserInfo = js.InvokeAsync<string>("GetBrowserInfo").ToString();
         }
 
         [HttpGet]
@@ -33,38 +40,47 @@ namespace AP.FamilyTree.Web.Data.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var emailErrorMessage = EmailVerification.GetNotCorrectStatusEmail(model.Email);
-                if (!string.IsNullOrEmpty(emailErrorMessage))
+                if (ModelState.IsValid)
                 {
-                    ModelState.AddModelError(string.Empty, emailErrorMessage);
-                }
-                else
-                {
-                    var result = await mSignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
-
-                    if (result.Succeeded)
+                    var emailErrorMessage = EmailVerification.GetNotCorrectStatusEmail(model.Email);
+                    if (!string.IsNullOrEmpty(emailErrorMessage))
                     {
-                        // проверяем, принадлежит ли URL приложению
-                        if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-                        {
-                            return Redirect(model.ReturnUrl);
-                        }
-                        else
-                        {
-                            return RedirectToPage("/_Host");
-                        }
+                        ModelState.AddModelError(string.Empty, emailErrorMessage);
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Неправильный логин и (или) пароль");
-                        // model.Error = "Неправильный логин и (или) пароль";
+                        var result =
+                            await mSignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe,
+                                false);
+
+                        if (result.Succeeded)
+                        {
+                            // проверяем, принадлежит ли URL приложению
+                            if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                            {
+                                return Redirect(model.ReturnUrl);
+                            }
+                            else
+                            {
+                                return RedirectToPage("/_Host");
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Неправильный логин и (или) пароль");
+                            // model.Error = "Неправильный логин и (или) пароль";
+                        }
                     }
                 }
-            }
 
-            return View(model);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "AccountController" + $"*{browserInfo}");
+            }
         }
 
         [HttpGet]
@@ -78,34 +94,42 @@ namespace AP.FamilyTree.Web.Data.Controllers
         [Microsoft.AspNetCore.Mvc.Route("register")]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var emailErrorMessage = EmailVerification.GetNotCorrectStatusEmail(model.Email);
-                if (!string.IsNullOrEmpty(emailErrorMessage))
+                if (ModelState.IsValid)
                 {
-                    ModelState.AddModelError(string.Empty, emailErrorMessage);
-                }
-                else
-                {
-                    var user = new IdentityUser { Email = model.Email, UserName = model.Email };
-                    // добавляем пользователя
-                    var result = await mUserManager.CreateAsync(user, model.Password);
-                    if (result.Succeeded)
+                    var emailErrorMessage = EmailVerification.GetNotCorrectStatusEmail(model.Email);
+                    if (!string.IsNullOrEmpty(emailErrorMessage))
                     {
-                        // установка куки
-                        await mSignInManager.SignInAsync(user, false);
-                        return RedirectToPage("/_Host");
+                        ModelState.AddModelError(string.Empty, emailErrorMessage);
                     }
                     else
                     {
-                        foreach (var error in result.Errors)
+                        var user = new IdentityUser { Email = model.Email, UserName = model.Email };
+                        // добавляем пользователя
+                        var result = await mUserManager.CreateAsync(user, model.Password);
+                        if (result.Succeeded)
                         {
-                            ModelState.AddModelError(string.Empty, error.Description);
+                            // установка куки
+                            await mSignInManager.SignInAsync(user, false);
+                            return RedirectToPage("/_Host");
+                        }
+                        else
+                        {
+                            foreach (var error in result.Errors)
+                            {
+                                ModelState.AddModelError(string.Empty, error.Description);
+                            }
                         }
                     }
                 }
+                return View(model);
             }
-            return View(model);
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "AccountController" + $"*{browserInfo}");
+                throw ex;
+            }
         }
 
         [HttpGet]
@@ -120,30 +144,40 @@ namespace AP.FamilyTree.Web.Data.Controllers
         [Microsoft.AspNetCore.Mvc.Route("forgotPassword")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var user = await mUserManager.FindByEmailAsync(model.Email);
-                if (user == null /*|| !(await mUserManager.IsEmailConfirmedAsync(user))*/)
+                if (ModelState.IsValid)
                 {
-                    // пользователь с данным email может отсутствовать в бд
-                    // тем не менее мы выводим стандартное сообщение, чтобы скрыть 
-                    // наличие или отсутствие пользователя в бд
+                    var user = await mUserManager.FindByEmailAsync(model.Email);
+                    if (user == null /*|| !(await mUserManager.IsEmailConfirmedAsync(user))*/)
+                    {
+                        // пользователь с данным email может отсутствовать в бд
+                        // тем не менее мы выводим стандартное сообщение, чтобы скрыть 
+                        // наличие или отсутствие пользователя в бд
+                        return View("ForgotPasswordConfirmation");
+                    }
+
+                    var code = await mUserManager.GeneratePasswordResetTokenAsync(user);
+                    var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code },
+                        protocol: HttpContext.Request.Scheme);
+                    //EmailService emailService = new EmailService();
+                    var message = new MailItem()
+                    {
+                        ToEmail = model.Email,
+                        Subject = "Reset Password",
+                        Text = $"Для сброса пароля пройдите по <a href='{callbackUrl}'>ссылке</a>"
+                    };
+                    MailingService.SendMessage(message);
                     return View("ForgotPasswordConfirmation");
                 }
 
-                var code = await mUserManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                //EmailService emailService = new EmailService();
-                var message = new MailItem()
-                {
-                    ToEmail = model.Email,
-                    Subject = "Reset Password",
-                    Text = $"Для сброса пароля пройдите по <a href='{callbackUrl}'>ссылке</a>"
-                };
-                MailingService.SendMessage(message);
-                return View("ForgotPasswordConfirmation");
+                return View(model);
             }
-            return View(model);
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "AccountController" + $"*{browserInfo}");
+                throw ex;
+            }
         }
 
         [HttpGet]
@@ -160,25 +194,37 @@ namespace AP.FamilyTree.Web.Data.Controllers
         [Microsoft.AspNetCore.Mvc.Route("resetPassword")]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                var user = await mUserManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    return View("ResetPasswordConfirmation");
+                }
+
+                var result = await mUserManager.ResetPasswordAsync(user, model.Code, model.Password);
+                if (result.Succeeded)
+                {
+                    return View("ResetPasswordConfirmation");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
                 return View(model);
             }
-            var user = await mUserManager.FindByEmailAsync(model.Email);
-            if (user == null)
+            catch (Exception ex)
             {
-                return View("ResetPasswordConfirmation");
+                Logger.LogError(ex, "AccountController" + $"*{browserInfo}");
+                throw ex;
             }
-            var result = await mUserManager.ResetPasswordAsync(user, model.Code, model.Password);
-            if (result.Succeeded)
-            {
-                return View("ResetPasswordConfirmation");
-            }
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-            return View(model);
         }
     }
 }
