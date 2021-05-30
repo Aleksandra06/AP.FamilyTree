@@ -5,7 +5,7 @@
     <MatDialog @bind-IsOpen="@ViewModel.DialogIsOpen" CanBeClosed="false">
         <EditForm Model="ViewModel.Model" OnValidSubmit="@(() => { SaveItem.InvokeAsync(ViewModel.Model); })">
             <MatDialogTitle class="diHeader">
-                <h3>@(ViewModel.Model.Id > 0 ? "Изменение дерева #" + ViewModel.Model.Id : "Создание дерева")</h3>
+                <h3>@(ViewModel.Model.Id > 0 ? "Изменение дерева " + ViewModel.Model.Name : "Создание дерева")</h3>
                 <div class="btn-group">
                     @if (ViewModel.IsConcurrencyError)
                     {
@@ -21,55 +21,24 @@
             </MatDialogTitle>
             <MatDialogContent>
                 <DataAnnotationsValidator />
-                <div style="width: 1500px; display: block; height: 700px;">
+                <div style="width: 500px; display: block; height: 300px;">
                     <div class="form-group row mb-1">
-                        <label for="Name" class="col-1 pl-0">Название: </label>
-                        <InputText @bind-Value="@ViewModel.Model.Name" Class="form-control form-control-sm col-9" id="Name"></InputText>
+                        <label for="Name" class="col-2 pl-0">Название: </label>
+                        <InputText @bind-Value="@ViewModel.Model.Name" Class="form-control form-control-sm col-10" id="Name"></InputText>
                         <ValidationMessage For="@(() => ViewModel.Model.Name)" />
                     </div>
                     <div class="form-group row mb-1">
-                        <label for="Surname" class="col-1 pl-0">Заметка: </label>
-                        <InputText @bind-Value="@ViewModel.Model.Surnames" Class="form-control form-control-sm col-9" id="Surname"></InputText>
+                        <label for="Year" class="col-2 pl-0">Года: </label>
+                        <InputDate @bind-Value="@ViewModel.Model.StartDate" Class="form-control form-control-sm col-4" id="Year1"></InputDate> 
+                        -
+                        <InputDate @bind-Value="@ViewModel.Model.EndDate" Class="form-control form-control-sm col-4" id="Year2"></InputDate>
+                        <ValidationMessage For="@(() => ViewModel.Model.Name)" />
+                    </div>
+                    <div class="form-group row mb-1">
+                        <label for="Surname" class="col-2 pl-0">Заметка: </label>
+                        <InputTextArea rows="8" @bind-Value="@ViewModel.Model.Surnames" Class="form-control form-control-sm col-10" id="Surname"></InputTextArea>
                         <ValidationMessage For="@(() => ViewModel.Model.Surnames)" />
                     </div>
-                    @*<div class="form-group row mb-1">
-                        <label for="MotherId" class="col-1 pl-0">Мать</label>
-                        <select class="form-control form-control-sm ml-0" style="width:300px;" @bind="@ViewModel.Model.MotherId">
-                            @if (ViewModel.Model.MotherId == 0)
-                            {
-                                <option value="0" selected="selected">--</option>
-                            }
-                            else
-                            {
-                                <option value="0">--</option>
-                            }
-                            @foreach (var x in MotherList)
-                            {
-                                if (ViewModel.Model.MotherId == x.Id)
-                                {
-                                    <option value="@x.Id" selected="selected">@x.Name @x.MiddleName @x.Surname</option>
-                                }
-                                else
-                                {
-                                    <option value="@x.Id">@x.Name @x.MiddleName @x.Surname</option>
-                                }
-                            }
-                        </select>
-                        <ValidationMessage For="@(() => ViewModel.Model.MotherId)" />
-                    </div>*@
-
-                    @*<div class="form-group row mb-1">
-                            <label for="KoModul" class="col-3 pl-0">KoModul</label>
-                            <InputNumber @bind-Value="@ViewModel.Model.KoModul" Class="form-control form-control-sm col-9" id="KoModul"></InputNumber>
-                            <ValidationMessage For="@(() => ViewModel.Model.KoModul)" />
-                        </div>
-                        <div class="form-group row mb-1">
-                            <label for="aktiv" class="col-3 pl-0">Aktiv</label>
-                            <div class="text-left">
-                                <InputCheckbox @bind-Value="@ViewModel.Model.aktiv" Class="form-control form-control-sm col-9 p-0" id="IsSerienbrief"></InputCheckbox>
-                            </div>
-                            <ValidationMessage For="@(() => ViewModel.Model.aktiv)" />
-                        </div>*@
                 </div>
             </MatDialogContent>
         </EditForm>
@@ -77,6 +46,7 @@
 </div>
 
 @code {
+
     [Parameter]
     public EditTreeDialogViewModel ViewModel { get; set; }
 
@@ -86,8 +56,4 @@
     [Parameter]
     public EventCallback<TreeCardItemViewModel> ReloadItem { get; set; }
 
-    protected override async Task OnParametersSetAsync()
-    {
-
-    }
 }

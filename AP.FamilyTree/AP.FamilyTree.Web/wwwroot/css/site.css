@@ -191,6 +191,36 @@ h4 {
     height: 25px !important;
 }
 
+.mdc-dialog {
+    z-index: 105 !important;
+}
+
+.diHeader h3 {
+    padding-left: 0px;
+    padding-top: 5px;
+    float: left;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.diHeader .btn-group {
+    float: right;
+}
+
+.diHeader .btn-group.float-left {
+    float: left;
+}
+
+.diHeader hr {
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+.diHeader.whHeader {
+    border-bottom: 1px solid rgba(0,0,0,.1);
+    padding-bottom: 6px !important
+}
+
+
 .mat-tab-group {
     border-top: 1px silver solid;
 }

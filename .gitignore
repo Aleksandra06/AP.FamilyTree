@@ -3,4 +3,5 @@ bin
 .vs
 Release
 AP.FamilyTree\AP.FamilyTree.Web\JsLib\node_modules
+Publish\*
 
