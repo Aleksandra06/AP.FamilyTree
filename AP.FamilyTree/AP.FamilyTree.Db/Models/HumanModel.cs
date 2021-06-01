@@ -17,6 +17,7 @@ namespace AP.FamilyTree.Db.Models
         public DateTime? DeathDate { get; set; }
         public int Gender { get; set; }
         public int TreeId { get; set; }
+
         public object Clone()
         {
             HumanModel tempObject = (HumanModel)this.MemberwiseClone();
