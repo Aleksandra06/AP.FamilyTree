@@ -14,23 +14,41 @@
             }
             @if (Model.Admin)
             {
-                <i class="btn glyphicon glyphicon-remove" @onclick="@(() => Remove.InvokeAsync(Model))"></i>
+                <i class="btn glyphicon glyphicon-remove" @onclick="@(() => OpenRemoveDialog())"></i>
             }
         </div>
     </div>
 }
+
+<ConfirmationDialog IsOpenConfirmation="@mIsOpenConfirmationDialog" Answer="@CloseRemoveDialog" />
 
 @code {
     [Parameter] public TreeCardItemViewModel Model { get; set; }
     [Parameter] public EventCallback<TreeCardItemViewModel> Change { get; set; }
     [Parameter] public EventCallback<TreeCardItemViewModel> Remove { get; set; }
 
+    private bool mIsOpenConfirmationDialog = false;
+
     //protected override async Task OnParametersSetAsync()
     //{
 
     //}
 
-    private async Task Open()
+    private void OpenRemoveDialog()
+    {
+        mIsOpenConfirmationDialog = true;
+    }
+
+    protected void CloseRemoveDialog(bool answer)
+    {
+        mIsOpenConfirmationDialog = false;
+        if (answer)
+        {
+            Remove.InvokeAsync(Model);
+        }
+    }
+
+    private void Open()
     {
         UriHelper.NavigateTo(UriHelper.BaseUri + $"tree/{Model.Id}");
     }

@@ -27,14 +27,20 @@ namespace AP.FamilyTree.Web.Pages.Trees
             await base.OnAfterRenderAsync(firstRender);
             if (firstRender)
             {
+                mIsItemLoaded = false;
+                StateHasChanged();
                 try
                 {
                     Model = await Service.GetAllForUser();
-                    StateHasChanged();
                 }
                 catch (Exception e)
                 {
                     ExceprionProcessing(e, FunctionModelEnum.OnAfterRenderAsync, null, null);
+                }
+                finally
+                {
+                    mIsItemLoaded = true;
+                    StateHasChanged();
                 }
             }
         }
@@ -57,7 +63,6 @@ namespace AP.FamilyTree.Web.Pages.Trees
                     item = Service.Update(item);
                     var index = Model.FindIndex(x => x.Id == item.Id);
                     Model[index] = item;
-
                 }
                 else
                 {

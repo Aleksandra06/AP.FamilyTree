@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using AP.FamilyTree.Db.Models;
@@ -36,6 +37,7 @@ namespace AP.FamilyTree.Web.PageModels.Trees
                 _item.Id = value;
             }
         }
+        [Required]
         public string Name
         {
             get
@@ -47,7 +49,7 @@ namespace AP.FamilyTree.Web.PageModels.Trees
                 _item.Name = value;
             }
         }
-        public DateTime StartDate
+        public DateTime? StartDate
         {
             get
             {
@@ -58,7 +60,7 @@ namespace AP.FamilyTree.Web.PageModels.Trees
                 _item.StartDate = value;
             }
         }
-        public DateTime EndDate
+        public DateTime? EndDate
         {
             get
             {
@@ -74,9 +76,22 @@ namespace AP.FamilyTree.Web.PageModels.Trees
         {
             get
             {
-                return StartDate.ToShortDateString() + " - " + EndDate.ToShortDateString();
+                string str = string.Empty;
+                if (StartDate != null)
+                {
+                    str += StartDate.Value.ToShortDateString();
+                }
+
+                str += " - ";
+                if (EndDate != null)
+                {
+                    str += EndDate.Value.ToShortDateString();
+                }
+
+                return str;
             }
         }
+        [Required]
         public string Surnames
         {
             get
