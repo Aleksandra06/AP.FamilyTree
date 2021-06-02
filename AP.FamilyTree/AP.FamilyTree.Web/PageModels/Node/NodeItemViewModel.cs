@@ -12,12 +12,12 @@ namespace AP.FamilyTree.Web.PageModels.Node
         public NodeItemViewModel()
         {
             _item = new NodeModel();
-            Human = new HumanModel();
+            Human = new PersonItemViewModel();
         }
         public NodeItemViewModel(NodeModel model, HumanModel human)
         {
             _item = model;
-            Human = human;
+            Human = new PersonItemViewModel(human);
         }
 
         public int NodeId
@@ -56,43 +56,7 @@ namespace AP.FamilyTree.Web.PageModels.Node
             get => _item.TreeId;
             set => _item.TreeId = value;
         }
-        [MaxLength(20)]
-        [Required]
-        public string Name
-        {
-            get => Human.Name;
-            set => Human.Name = value;
-        }
-        [MaxLength(20)]
-        [Required]
-        public string Surname
-        {
-            get => Human.Surname;
-            set => Human.Surname = value;
-        }
-        [MaxLength(20)]
-        public string MiddleName
-        {
-            get => Human.MiddleName;
-            set => Human.MiddleName = value;
-        }
-        public DateTime? BirthDate
-        {
-            get => Human.BirthDate;
-            set => Human.BirthDate = value;
-        }
-        public DateTime? DeathDate
-        {
-            get => Human.DeathDate;
-            set => Human.DeathDate = value;
-        }
-        [Required]
-        public int Gender
-        {
-            get => Human.Gender;
-            set => Human.Gender = value;
-        }
-        public HumanModel Human { get; set; }
+        public PersonItemViewModel Human { get; set; }
         public HumanModel Mother { get; set; }
         public HumanModel Father { get; set; }
 
@@ -102,7 +66,7 @@ namespace AP.FamilyTree.Web.PageModels.Node
         {
             NodeItemViewModel tempObject = (NodeItemViewModel)this.MemberwiseClone();
             tempObject._item = (NodeModel)_item.Clone();
-            tempObject.Human = this.Mother == null ? null : (HumanModel)this.Mother.Clone();
+            tempObject.Human = this.Mother == null ? null : (PersonItemViewModel)this.Mother.Clone();
             tempObject.Mother = this.Mother == null ? null : (HumanModel)this.Mother.Clone();
             tempObject.Father = this.Mother == null ? null : (HumanModel)this.Mother.Clone();
             return tempObject;

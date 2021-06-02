@@ -53,7 +53,7 @@ namespace AP.FamilyTree.Web.Pages.Node
         {
             mEditViewModel.DialogIsOpen = true;
             mEditViewModel.Model = new NodeItemViewModel();
-            mEditViewModel.Model.Human = new HumanModel();
+            mEditViewModel.Model.Human = new PersonItemViewModel();
             mEditViewModel.Model.TreeId = TreeId;
         }
         protected void Save(NodeItemViewModel item)

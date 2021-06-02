@@ -16,6 +16,14 @@ namespace AP.FamilyTree.Db.Models
         public DateTime? DeathDate { get; set; }
         public int Gender { get; set; }
         public int TreeId { get; set; }
+        public string PlaceOfBirth { get; set; }
+        public DateTime? WeddingDate { get; set; }
+        public string PlaceOfDeath { get; set; }
+        public string BurialPlace { get; set; }
+        public string Nationality { get; set; }
+        public string Works { get; set; }
+        public string Biography { get; set; }
+        public byte[] Photo { get; set; }
 
         public object Clone()
         {

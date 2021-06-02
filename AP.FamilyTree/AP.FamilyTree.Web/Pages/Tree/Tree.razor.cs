@@ -26,7 +26,7 @@ namespace AP.FamilyTree.Web.Pages.Tree
                 Models = await Service.GetByTreeId(TreeId);
                 var idList = Models.Select(x => x.HumanId).ToArray();
                 var namesList = Models.Select(x => x.Human.Name).ToArray();
-                var datesList = Models.Select(x => GetText(x.Human)).ToArray();
+                var datesList = Models.Select(x => GetText(x.Human.Item)).ToArray();
                 var parentsList = Models.Select(x => new List<int>() { x.MotherId.GetValueOrDefault(), x.FatherId.GetValueOrDefault() }).Select(y => y.ToArray()).ToArray();
 
                 await Js.InvokeVoidAsync("Test.functionOne", idList, namesList, datesList, parentsList, Models.Count);

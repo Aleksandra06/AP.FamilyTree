@@ -270,3 +270,7 @@ h4 {
     background-color: gray;
     z-index: 100;
 }
+
+input[type="file"].choiseFile {
+    display: none;
+}

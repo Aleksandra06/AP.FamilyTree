@@ -46,8 +46,8 @@ namespace AP.FamilyTree.Web.Data.Services.NodeServices
 
         public NodeItemViewModel Create(NodeItemViewModel item)
         {
-            item.Human.TreeId = item.TreeId;
-            var modelHuman = mHumanRepo.Create(item.Human);
+            item.Human.Item.TreeId = item.TreeId;
+            var modelHuman = mHumanRepo.Create(item.Human.Item);
             var modelNode = new NodeModel();
             modelNode.TreeId = item.TreeId;
             modelNode.HumanId = modelHuman.Id;
@@ -60,23 +60,31 @@ namespace AP.FamilyTree.Web.Data.Services.NodeServices
             {
                 Father = modelNode.FatherId != 0 ? mHumanRepo.FindById(modelNode.FatherId) : null,
                 FatherId = modelNode.FatherId,
-                Human = modelHuman,
+                Human = new PersonItemViewModel(modelHuman),
                 HumanId = modelNode.HumanId,
                 Mother = modelNode.MotherId != 0 ? mHumanRepo.FindById(modelNode.MotherId) : null,
                 MotherId = modelNode.MotherId,
-                NodeId = modelNode.Id
+                NodeId = modelNode.Id,
+                TreeId = modelNode.TreeId,
             };
         }
 
         public NodeItemViewModel Update(NodeItemViewModel item)
         {
             var modelHuman = mHumanRepo.FindById(item.HumanId);
-            modelHuman.Name = item.Name;
-            modelHuman.Surname = item.Surname;
-            modelHuman.BirthDate = item.BirthDate;
-            modelHuman.DeathDate = item.DeathDate;
-            modelHuman.MiddleName = item.MiddleName;
-            modelHuman.Gender = item.Gender;
+            modelHuman.Name = item.Human.Name;
+            modelHuman.Surname = item.Human.Surname;
+            modelHuman.BirthDate = item.Human.BirthDate;
+            modelHuman.DeathDate = item.Human.DeathDate;
+            modelHuman.MiddleName = item.Human.MiddleName;
+            modelHuman.Gender = item.Human.Gender;
+            modelHuman.BurialPlace = item.Human.BurialPlace;
+            modelHuman.Biography = item.Human.Biography;
+            modelHuman.Nationality = item.Human.Nationality;
+            modelHuman.PlaceOfBirth = item.Human.PlaceOfBirth;
+            modelHuman.PlaceOfDeath = item.Human.PlaceOfDeath;
+            modelHuman.WeddingDate = item.Human.WeddingDate;
+            modelHuman.Works = item.Human.Works;
             modelHuman = mHumanRepo.Update(modelHuman);
 
             var modelNode = mNodeRepo.FindById(item.NodeId);
@@ -88,7 +96,7 @@ namespace AP.FamilyTree.Web.Data.Services.NodeServices
             {
                 Father = modelNode.FatherId != 0 ? mHumanRepo.FindById(modelNode.FatherId) : null,
                 FatherId = modelNode.FatherId,
-                Human = modelHuman,
+                Human = new PersonItemViewModel(modelHuman),
                 HumanId = modelNode.HumanId,
                 Mother = modelNode.MotherId != 0 ? mHumanRepo.FindById(modelNode.MotherId) : null,
                 MotherId = modelNode.MotherId,
