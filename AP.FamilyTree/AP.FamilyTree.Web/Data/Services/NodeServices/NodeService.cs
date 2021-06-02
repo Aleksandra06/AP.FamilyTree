@@ -27,18 +27,18 @@ namespace AP.FamilyTree.Web.Data.Services.NodeServices
 
         private NodeItemViewModel ConvertAndGetData(NodeModel nodeModel)
         {
-            var item = new NodeItemViewModel(nodeModel);
+            var human = mHumanRepo.FindById(nodeModel.HumanId);
 
-            item.Human = mHumanRepo.FindById(nodeModel.HumanId);
+            var item = new NodeItemViewModel(nodeModel, human);
 
-            if (nodeModel.MotherId != null)
+            if (nodeModel.MotherId != 0)
             {
-                item.Mother = mHumanRepo.FindById(nodeModel.MotherId.GetValueOrDefault());
+                item.Mother = mHumanRepo.FindById(nodeModel.MotherId);
             }
 
-            if (nodeModel.FatherId != null)
+            if (nodeModel.FatherId != 0)
             {
-                item.Father = mHumanRepo.FindById(nodeModel.FatherId.GetValueOrDefault());
+                item.Father = mHumanRepo.FindById(nodeModel.FatherId);
             }
 
             return item;
@@ -51,21 +51,18 @@ namespace AP.FamilyTree.Web.Data.Services.NodeServices
             var modelNode = new NodeModel();
             modelNode.TreeId = item.TreeId;
             modelNode.HumanId = modelHuman.Id;
-            modelNode.IsActiv = item.IsActiv;
-            modelNode.FatherId = item.FatherId;
-            modelNode.MotherId = item.MotherId;
+            modelNode.FatherId = item.FatherId ?? 0;
+            modelNode.MotherId = item.MotherId ?? 0;
 
             modelNode = mNodeRepo.Create(modelNode);
 
             return new NodeItemViewModel()
             {
-                Father = modelNode.FatherId != 0 ? mHumanRepo.FindById(modelNode.FatherId.GetValueOrDefault()) : null,
+                Father = modelNode.FatherId != 0 ? mHumanRepo.FindById(modelNode.FatherId) : null,
                 FatherId = modelNode.FatherId,
                 Human = modelHuman,
                 HumanId = modelNode.HumanId,
-                IsActiv = modelNode.IsActiv,
-                IsDeleted = modelNode.IsDeleted,
-                Mother = modelNode.MotherId != 0 ? mHumanRepo.FindById(modelNode.MotherId.GetValueOrDefault()) : null,
+                Mother = modelNode.MotherId != 0 ? mHumanRepo.FindById(modelNode.MotherId) : null,
                 MotherId = modelNode.MotherId,
                 NodeId = modelNode.Id
             };
@@ -74,29 +71,26 @@ namespace AP.FamilyTree.Web.Data.Services.NodeServices
         public NodeItemViewModel Update(NodeItemViewModel item)
         {
             var modelHuman = mHumanRepo.FindById(item.HumanId);
-            modelHuman.Name = item.Human.Name;
-            modelHuman.Surname = item.Human.Surname;
-            modelHuman.BirthDate = item.Human.BirthDate;
-            modelHuman.DeathDate = item.Human.DeathDate;
-            modelHuman.MiddleName = item.Human.MiddleName;
-            modelHuman.IsDeleted = item.Human.IsDeleted;
+            modelHuman.Name = item.Name;
+            modelHuman.Surname = item.Surname;
+            modelHuman.BirthDate = item.BirthDate;
+            modelHuman.DeathDate = item.DeathDate;
+            modelHuman.MiddleName = item.MiddleName;
+            modelHuman.Gender = item.Gender;
             modelHuman = mHumanRepo.Update(modelHuman);
 
             var modelNode = mNodeRepo.FindById(item.NodeId);
-            modelNode.FatherId = item.FatherId;
-            modelNode.IsActiv = item.IsActiv;
-            modelNode.MotherId = item.MotherId;
+            modelNode.FatherId = item.FatherId ?? 0;
+            modelNode.MotherId = item.MotherId ?? 0;
             modelNode = mNodeRepo.Update(modelNode);
 
             return new NodeItemViewModel()
             {
-                Father = modelNode.FatherId != 0 ? mHumanRepo.FindById(modelNode.FatherId.GetValueOrDefault()) : null,
+                Father = modelNode.FatherId != 0 ? mHumanRepo.FindById(modelNode.FatherId) : null,
                 FatherId = modelNode.FatherId,
                 Human = modelHuman,
                 HumanId = modelNode.HumanId,
-                IsActiv = modelNode.IsActiv,
-                IsDeleted = modelNode.IsDeleted,
-                Mother = modelNode.MotherId != 0 ? mHumanRepo.FindById(modelNode.MotherId.GetValueOrDefault()) : null,
+                Mother = modelNode.MotherId != 0 ? mHumanRepo.FindById(modelNode.MotherId) : null,
                 MotherId = modelNode.MotherId,
                 NodeId = modelNode.Id
             };

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using AP.FamilyTree.Db.Models;
+using AP.FamilyTree.Web.Data;
 using AP.FamilyTree.Web.PageModels.Interfaces;
 
 namespace AP.FamilyTree.Web.PageModels.Trees
@@ -76,19 +77,7 @@ namespace AP.FamilyTree.Web.PageModels.Trees
         {
             get
             {
-                string str = string.Empty;
-                if (StartDate != null)
-                {
-                    str += StartDate.Value.ToShortDateString();
-                }
-
-                str += " - ";
-                if (EndDate != null)
-                {
-                    str += EndDate.Value.ToShortDateString();
-                }
-
-                return str;
+                return GlobalFunction.ConvertToLiveYear(StartDate, EndDate);
             }
         }
         [Required]

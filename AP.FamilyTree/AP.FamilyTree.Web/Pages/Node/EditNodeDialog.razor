@@ -34,22 +34,22 @@
                     <div style="width: 1000px; display: block; height: 700px;">
                         <div class="form-group row mb-1">
                             <label for="Name" class="col-1 pl-0">Имя</label>
-                            <InputText @bind-Value="@ViewModel.Model.Human.Name" Class="form-control form-control-sm col-9" id="Name"></InputText>
-                            <ValidationMessage For="@(() => ViewModel.Model.Human.Name)" />
+                            <InputText @bind-Value="@ViewModel.Model.Name" Class="form-control form-control-sm col-9" id="Name"></InputText>
+                            <ValidationMessage For="@(() => ViewModel.Model.Name)" />
                         </div>
                         <div class="form-group row mb-1">
                             <label for="Surname" class="col-1 pl-0">Фамилия</label>
-                            <InputText @bind-Value="@ViewModel.Model.Human.Surname" Class="form-control form-control-sm col-9" id="Surname"></InputText>
-                            <ValidationMessage For="@(() => ViewModel.Model.Human.Surname)" />
+                            <InputText @bind-Value="@ViewModel.Model.Surname" Class="form-control form-control-sm col-9" id="Surname"></InputText>
+                            <ValidationMessage For="@(() => ViewModel.Model.Surname)" />
                         </div>
                         <div class="form-group row mb-1">
                             <label for="MiddleName" class="col-1 pl-0">Отчество</label>
-                            <InputText @bind-Value="@ViewModel.Model.Human.MiddleName" Class="form-control form-control-sm col-9" id="MiddleName"></InputText>
-                            <ValidationMessage For="@(() => ViewModel.Model.Human.MiddleName)" />
+                            <InputText @bind-Value="@ViewModel.Model.MiddleName" Class="form-control form-control-sm col-9" id="MiddleName"></InputText>
+                            <ValidationMessage For="@(() => ViewModel.Model.MiddleName)" />
                         </div>
                         <div class="form-group row mb-1">
                             <label for="Gender" class="col-1 pl-0">Пол</label>
-                            <select class="form-control form-control-sm ml-0" style="width:300px;" @bind="@ViewModel.Model.Human.Gender">
+                            <select class="form-control form-control-sm ml-0" style="width:300px;" @bind="@ViewModel.Model.Gender">
                                 @foreach (GenderEnum x in Enum.GetValues(typeof(GenderEnum)))
                                 {
                                     @if (x == GenderEnum.Man)
@@ -76,7 +76,15 @@
                                     }
                                 }
                             </select>
-                            <ValidationMessage For="@(() => ViewModel.Model.Human.Gender)" />
+                            <ValidationMessage For="@(() => ViewModel.Model.Gender)" />
+                        </div>
+                        <div class="form-group row mb-1">
+                            <label for="Year1" class="col-1 pl-0">Годы жизни</label>
+                            <InputDate @bind-Value="@ViewModel.Model.BirthDate" Class="form-control form-control-sm col-4" id="Year1"></InputDate>
+                            <i class="pl-1 pr-1">-</i>
+                            <InputDate @bind-Value="@ViewModel.Model.DeathDate" Class="form-control form-control-sm col-4" id="Year1"></InputDate>
+                            <ValidationMessage For="@(() => ViewModel.Model.BirthDate)" />
+                            <ValidationMessage For="@(() => ViewModel.Model.DeathDate)" />
                         </div>
                         <div class="form-group row mb-1">
                             <label for="MotherIdToString" class="col-1 pl-0">Мать</label>
@@ -128,18 +136,6 @@
                             </InputSelect>
                             <ValidationMessage For="@(() => ViewModel.Model.FatherId)" />
                         </div>
-                        @*<div class="form-group row mb-1">
-                                <label for="KoModul" class="col-3 pl-0">KoModul</label>
-                                <InputNumber @bind-Value="@ViewModel.Model.KoModul" Class="form-control form-control-sm col-9" id="KoModul"></InputNumber>
-                                <ValidationMessage For="@(() => ViewModel.Model.KoModul)" />
-                            </div>
-                            <div class="form-group row mb-1">
-                                <label for="aktiv" class="col-3 pl-0">Aktiv</label>
-                                <div class="text-left">
-                                    <InputCheckbox @bind-Value="@ViewModel.Model.aktiv" Class="form-control form-control-sm col-9 p-0" id="IsSerienbrief"></InputCheckbox>
-                                </div>
-                                <ValidationMessage For="@(() => ViewModel.Model.aktiv)" />
-                            </div>*@
                     </div>
                 </MatDialogContent>
             </EditForm>
@@ -178,18 +174,25 @@ else
         {
             MotherList = Service.GetBySettings(GenderEnum.Woman, ViewModel.Model.TreeId);
             FatherList = Service.GetBySettings(GenderEnum.Man, ViewModel.Model.TreeId);
-            var index = MotherList.FindIndex(x => x.Id == ViewModel.Model.HumanId);
-            if (index >= 0)
+            if (ViewModel.Model.NodeId > 0)
             {
-                MotherList.RemoveAt(index);
+                var index = MotherList.FindIndex(x => x.Id == ViewModel.Model.HumanId);
+                if (index >= 0)
+                {
+                    MotherList.RemoveAt(index);
+                }
+                else
+                {
+                    index = FatherList.FindIndex(x => x.Id == ViewModel.Model.HumanId);
+                    if (index >= 0)
+                    {
+                        FatherList.RemoveAt(index);
+                    }
+                }
             }
             else
             {
-                index = FatherList.FindIndex(x => x.Id == ViewModel.Model.HumanId);
-                if (index >= 0)
-                {
-                    FatherList.RemoveAt(index);
-                }
+                ViewModel.Model.Gender = GenderEnum.Man.GetHashCode();
             }
         }
         catch (Exception e)

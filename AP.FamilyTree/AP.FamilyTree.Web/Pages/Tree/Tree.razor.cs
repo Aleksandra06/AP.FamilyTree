@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AP.FamilyTree.Db.Models;
+using AP.FamilyTree.Web.Data;
 using AP.FamilyTree.Web.Data.Services.TreesServices;
 using AP.FamilyTree.Web.PageModels;
 using AP.FamilyTree.Web.PageModels.Node;
@@ -38,16 +39,7 @@ namespace AP.FamilyTree.Web.Pages.Tree
 
             str += "\n";
 
-            if (model.BirthDate != null)
-            {
-                str += model.BirthDate.Value.ToShortDateString();
-            }
-
-            str += " - ";
-            if (model.DeathDate != null)
-            {
-                str += model.DeathDate.Value.ToShortDateString();
-            }
+            str += GlobalFunction.ConvertToLiveYear(model.BirthDate, model.DeathDate);
 
             return str;
         }

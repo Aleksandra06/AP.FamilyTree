@@ -38,11 +38,6 @@ namespace AP.FamilyTree.Web.PageModels.Node
             get => _item.MiddleName;
             set => _item.MiddleName = value;
         }
-        public bool IsDeleted
-        {
-            get => _item.IsDeleted;
-            set => _item.IsDeleted = value;
-        }
         public DateTime? BirthDate
         {
             get => _item.BirthDate;

@@ -27,18 +27,18 @@ namespace AP.FamilyTree.Web.Data.Services.TreesServices
         }
         private NodeItemViewModel ConvertAndGetData(NodeModel nodeModel)
         {
-            var item = new NodeItemViewModel(nodeModel);
+            var human = mHumanRepo.FindById(nodeModel.HumanId);
 
-            item.Human = mHumanRepo.FindById(nodeModel.HumanId);
+            var item = new NodeItemViewModel(nodeModel, human);
 
-            if (nodeModel.MotherId != null)
+            if (nodeModel.MotherId != 0)
             {
-                item.Mother = mHumanRepo.FindById(nodeModel.MotherId.GetValueOrDefault());
+                item.Mother = mHumanRepo.FindById(nodeModel.MotherId);
             }
 
-            if (nodeModel.FatherId != null)
+            if (nodeModel.FatherId != 0)
             {
-                item.Father = mHumanRepo.FindById(nodeModel.FatherId.GetValueOrDefault());
+                item.Father = mHumanRepo.FindById(nodeModel.FatherId);
             }
 
             return item;

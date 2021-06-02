@@ -10,10 +10,8 @@ namespace AP.FamilyTree.Db.Models
         [Key]
         public int Id { get; set; }
         public int HumanId { get; set; }
-        public int? MotherId { get; set; }
-        public int? FatherId { get; set; }
-        public bool IsDeleted { get; set; }
-        public bool IsActiv { get; set; }
+        public int MotherId { get; set; }
+        public int FatherId { get; set; }
         public int TreeId { get; set; }
         public object Clone()
         {

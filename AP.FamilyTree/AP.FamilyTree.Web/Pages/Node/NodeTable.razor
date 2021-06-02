@@ -1,4 +1,5 @@
 ﻿@page "/node"
+@using AP.FamilyTree.Web.Data
 @inherits NodeTableViewModel
 
 @if (!IsFailed)
@@ -13,15 +14,11 @@
     <table class="table table-sm col-12">
         <thead>
             <tr>
-                <!--<th>-->
-                @*<SortIcon Column="Nachname" Title="Nachname" Sort="@Sort"></SortIcon>*@
-                <!--</th>-->
                 <th>#</th>
                 <th>Имя</th>
                 <th>Фамилия</th>
                 <th>Отчество</th>
-                <th>Дата рождения</th>
-                <th>Дата смерти</th>
+                <th>Годы жизни</th>
                 <th>Отец</th>
                 <th>Мать</th>
                 <th></th>
@@ -36,8 +33,7 @@
                     <td>@item.Human.Name</td>
                     <td>@item.Human.Surname</td>
                     <td>@item.Human.MiddleName</td>
-                    <td>@(item.Human.BirthDate != null ? item.Human.BirthDate?.ToShortDateString() : "")</td>
-                    <td>@(item.Human.DeathDate != null ? item.Human.DeathDate?.ToShortDateString() : "")</td>
+                    <td>@GlobalFunction.ConvertToLiveYear(item.Human.BirthDate, item.Human.DeathDate)</td>
                     <td>@item.Mother?.Name</td>
                     <td>@item.Father?.Name</td>
                     <td><i class="btn glyphicon glyphicon-edit" @onclick="(() => EditNodeOpenDialog(item))" title="Редактирование"></i></td>

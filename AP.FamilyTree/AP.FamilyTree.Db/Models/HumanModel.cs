@@ -12,7 +12,6 @@ namespace AP.FamilyTree.Db.Models
         public string Name { get; set; }
         public string Surname { get; set; }
         public string MiddleName { get; set; }
-        public bool IsDeleted { get; set; }
         public DateTime? BirthDate { get; set; }
         public DateTime? DeathDate { get; set; }
         public int Gender { get; set; }
