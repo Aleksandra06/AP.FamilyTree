@@ -24,21 +24,21 @@ namespace AP.FamilyTree.Web.PageModels.Node
             get => _item.Id;
             set => _item.Id = value;
         }
-        [MaxLength(20)]
-        [Required]
+        [MaxLength(20, ErrorMessage = "Привышена максимальная длина (20 символов)")]
+        [Required(ErrorMessage = "Это поле должно быть заполнено")]
         public string Name
         {
             get => _item.Name;
             set => _item.Name = value;
         }
-        [MaxLength(20)]
-        [Required]
+        [MaxLength(20, ErrorMessage = "Привышена максимальная длина (20 символов)")]
+        [Required(ErrorMessage = "Это поле должно быть заполнено")]
         public string Surname
         {
             get => _item.Surname;
             set => _item.Surname = value;
         }
-        [MaxLength(20)]
+        [MaxLength(20, ErrorMessage = "Привышена максимальная длина (20 символов)")]
         public string MiddleName
         {
             get => _item.MiddleName;
@@ -54,7 +54,7 @@ namespace AP.FamilyTree.Web.PageModels.Node
             get => _item.DeathDate;
             set => _item.DeathDate = value;
         }
-        [Required]
+        [Required(ErrorMessage = "Это поле должно быть заполнено")]
         public int Gender
         {
             get => _item.Gender;
@@ -65,13 +65,13 @@ namespace AP.FamilyTree.Web.PageModels.Node
             get => _item.Biography;
             set => _item.Biography = value;
         }
-        [MaxLength(50)]
+        [MaxLength(50, ErrorMessage = "Привышена максимальная длина (20 символов)")]
         public string PlaceOfBirth
         {
             get => _item.PlaceOfBirth;
             set => _item.PlaceOfBirth = value;
         }
-        [MaxLength(50)]
+        [MaxLength(50, ErrorMessage = "Привышена максимальная длина (20 символов)")]
         public string Nationality
         {
             get => _item.Nationality;
@@ -82,19 +82,19 @@ namespace AP.FamilyTree.Web.PageModels.Node
             get => _item.WeddingDate;
             set => _item.WeddingDate = value;
         }
-        [MaxLength(50)]
+        [MaxLength(50, ErrorMessage = "Привышена максимальная длина (20 символов)")]
         public string PlaceOfDeath
         {
             get => _item.PlaceOfDeath;
             set => _item.PlaceOfDeath = value;
         }
-        [MaxLength(50)]
+        [MaxLength(50, ErrorMessage = "Привышена максимальная длина (20 символов)")]
         public string BurialPlace
         {
             get => _item.BurialPlace;
             set => _item.BurialPlace = value;
         }
-        [MaxLength(100)]
+        [MaxLength(100, ErrorMessage = "Привышена максимальная длина (20 символов)")]
         public string Works
         {
             get => _item.Works;

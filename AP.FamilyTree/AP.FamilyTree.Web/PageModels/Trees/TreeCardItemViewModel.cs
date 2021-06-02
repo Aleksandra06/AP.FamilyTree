@@ -38,7 +38,7 @@ namespace AP.FamilyTree.Web.PageModels.Trees
                 _item.Id = value;
             }
         }
-        [Required]
+        [Required(ErrorMessage = "Это поле должно быть заполнено")]
         public string Name
         {
             get
@@ -80,7 +80,7 @@ namespace AP.FamilyTree.Web.PageModels.Trees
                 return GlobalFunction.ConvertToLiveYear(StartDate, EndDate);
             }
         }
-        [Required]
+        [Required(ErrorMessage = "Это поле должно быть заполнена")]
         public string Surnames
         {
             get
