@@ -46,6 +46,7 @@ namespace AP.FamilyTree.Web.Data.Services.NodeServices
 
         public NodeItemViewModel Create(NodeItemViewModel item)
         {
+            item.Human.TreeId = item.TreeId;
             var modelHuman = mHumanRepo.Create(item.Human);
             var modelNode = new NodeModel();
             modelNode.TreeId = item.TreeId;

@@ -16,6 +16,8 @@ namespace AP.FamilyTree.Web.Data.Services.TreesServices
         private readonly EFRepository<TreesModel> mRepo;
         private readonly EFRepository<UserTree> mRepoUserTree;
         private readonly EFRepository<Access> mRepoAccess;
+        private readonly EFRepository<NodeModel> mRepoNodeModel;
+        private readonly EFRepository<HumanModel> mRepoHumanModel;
 
         private string mUserName = "";
         private string mUserId;
@@ -52,6 +54,8 @@ namespace AP.FamilyTree.Web.Data.Services.TreesServices
             mRepo = new EFRepository<TreesModel>(context);
             mRepoUserTree = new EFRepository<UserTree>(context);
             mRepoAccess = new EFRepository<Access>(context);
+            mRepoNodeModel = new EFRepository<NodeModel>(context);
+            mRepoHumanModel = new EFRepository<HumanModel>(context);
             mContex = context;
         }
         public async Task<List<TreeCardItemViewModel>> GetAllForUser()
@@ -154,13 +158,33 @@ namespace AP.FamilyTree.Web.Data.Services.TreesServices
                 return;
             }
             mRepoUserTree.Remove(userTreeItem);
+            
+            var listAccesses = mRepoAccess.Get(x => x.TreeId == item.Id).ToList();
+            foreach (var access in listAccesses)
+            {
+                var itemAccess = mRepoAccess.FindById(access.Id);
+                mRepoAccess.Remove(itemAccess);
+            }
+
+            var listNode = mRepoNodeModel.Get(x => x.TreeId == item.Id).ToList();
+            foreach (var node in listNode)
+            {
+                var itemNode = mRepoNodeModel.FindById(node.Id);
+                mRepoNodeModel.Remove(itemNode);
+            }
+
+            var listHuman = mRepoHumanModel.Get(x => x.TreeId == item.Id).ToList();
+            foreach (var human in listHuman)
+            {
+                var itemNode = mRepoHumanModel.FindById(human.Id);
+                mRepoHumanModel.Remove(itemNode);
+            }
 
             var model = mRepo.FindById(item.Id);
             if (model == null)
             {
                 return;
             }
-
             mRepo.Remove(model);
         }
 
