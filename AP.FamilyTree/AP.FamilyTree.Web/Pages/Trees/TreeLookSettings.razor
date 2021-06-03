@@ -1,4 +1,5 @@
 ﻿@page "/tree/{Id:int}"
+@attribute [Authorize(Policy = "User")]
 
 @using AP.FamilyTree.Web.Data.Services.TreesServices
 @using AP.FamilyTree.Web.Data

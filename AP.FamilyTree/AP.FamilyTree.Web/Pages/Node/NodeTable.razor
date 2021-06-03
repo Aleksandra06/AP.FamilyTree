@@ -2,6 +2,7 @@
 @using AP.FamilyTree.Web.Data
 @using AP.FamilyTree.Web.Globals
 @inherits NodeTableViewModel
+@attribute [Authorize(Policy = "User")]
 
 @if (!IsFailed)
 {
@@ -57,7 +58,7 @@
     {
         <EditNodeDialog ViewModel="@mEditViewModel" ReloadItem="@ReloadItem" SaveItem="@Save" />
     }
-    
+
     <ConfirmationDialog IsOpenConfirmation="@mIsOpenConfirmationDialog" Answer="@CloseRemoveDialog" />
 
     <InformarionDialog ViewModel="@mInformationDialog" Close="@CloseInformationDialog" />

@@ -1,7 +1,7 @@
 ﻿@page "/system/errors"
 @using MatBlazor
 @inherits SystemErrorLogPageViewModel
-@*@attribute [Authorize(Policy = "SysAdminRoles")]*@
+@attribute [Authorize(Policy = "User")]
 
 @if (!IsFailed)
 {

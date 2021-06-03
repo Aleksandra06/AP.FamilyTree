@@ -1,5 +1,6 @@
 ﻿@page "/personalOffice"
 @inherits PersonalOfficeViewModel
+@attribute [Authorize(Policy = "User")]
 
 @if (!IsFailed)
 {

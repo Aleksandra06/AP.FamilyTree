@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AP.FamilyTree.Db;
 using AP.FamilyTree.Mail;
@@ -45,13 +46,16 @@ namespace AP.FamilyTree.Web
             var connectionString = Configuration.GetConnectionString("FamilyTreeDbConnetionString");
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
-            //options.UseSqlite("Data Source = Users.db")
-            //);
+
+            services.AddAuthorization(config =>
+            {
+                config.AddPolicy("User", policy => policy.RequireRole("User", "Administrator"));
+                config.AddPolicy("Administrator", policy => policy.RequireRole("Administrator"));
+            });
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-
 
             services.AddHttpContextAccessor();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -59,9 +63,21 @@ namespace AP.FamilyTree.Web
             services.AddDbContext<FamilyTreeDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            services.AddMatBlazor();
             services.AddRazorPages();
             services.AddMvcCore();
-            services.AddServerSideBlazor();
+            services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
+
+            services.AddHttpClient();
+            services.AddScoped(r =>
+            {
+                var client = new HttpClient(new HttpClientHandler()
+                {
+                    ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator //()=> { true}
+                });
+                return client;
+            });
+
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddControllersWithViews();
@@ -69,8 +85,6 @@ namespace AP.FamilyTree.Web
             services.AddSingleton<ILogger, Logger>();
             services.AddSingleton<ILoggerProvider, LoggerProvider>();
             services.AddSingleton<IPushNotificationsQueue, PushNotificationsQueue>();
-
-            services.AddMatBlazor();
 
             services.AddHostedService<PushNotificationsDequeuer>();
 
