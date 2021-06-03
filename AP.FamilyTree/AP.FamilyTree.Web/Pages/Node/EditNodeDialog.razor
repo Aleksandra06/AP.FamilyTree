@@ -1,6 +1,7 @@
 ﻿@using AP.FamilyTree.Web.PageModels.Node
 @using AP.FamilyTree.Web.Data
 @using AP.FamilyTree.Web.Data.Services.NodeServices
+@using AP.FamilyTree.Web.Globals
 @using BlazorInputFile
 @inherits AP.FamilyTree.Web.PageModels.BaseViewModel
 @inject HumanService Service
@@ -241,6 +242,7 @@ else
             else
             {
                 ViewModel.Model.Human.Gender = GenderEnum.Man.GetHashCode();
+                buttonUploadName = "Загрузить файл";
             }
         }
         catch (Exception e)

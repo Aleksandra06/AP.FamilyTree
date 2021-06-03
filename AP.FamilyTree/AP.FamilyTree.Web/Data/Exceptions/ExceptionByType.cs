@@ -1,4 +1,5 @@
 ﻿using System;
+using AP.FamilyTree.Web.Globals;
 
 namespace AP.FamilyTree.Web.Data.Exceptions
 {
