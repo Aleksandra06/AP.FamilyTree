@@ -9,6 +9,7 @@ using AP.FamilyTree.Web.Globals;
 using AP.FamilyTree.Web.PageModels;
 using AP.FamilyTree.Web.PageModels.Node;
 using Microsoft.AspNetCore.Components;
+using NPOI.SS.Formula.Functions;
 
 namespace AP.FamilyTree.Web.Pages.Node
 {
@@ -20,7 +21,9 @@ namespace AP.FamilyTree.Web.Pages.Node
         protected List<NodeItemViewModel> Model { get; set; }
         protected NodeItemViewModel mCurrentItem;
 
-        protected EditNodeDialogViewModel mEditViewModel { get; set; } = new EditNodeDialogViewModel();
+        protected EditNodeDialogViewModel mEditViewModel = new EditNodeDialogViewModel();
+
+        protected bool mIsOpenConfirmationDialog = false;
 
         protected override Task OnInitializedAsync()
         {
@@ -123,6 +126,36 @@ namespace AP.FamilyTree.Web.Pages.Node
             {
                 mCurrentItem = item;
                 ExceprionProcessing(e, FunctionModelEnum.Reload, mCurrentItem, mEditViewModel?.DialogIsOpen == true ? mEditViewModel : null);
+            }
+        }
+
+        protected void RemoveOpenDialog(NodeItemViewModel item)
+        {
+            mCurrentItem = item;
+            mIsOpenConfirmationDialog = true;
+        }
+
+        protected void CloseRemoveDialog(bool answer)
+        {
+            mIsOpenConfirmationDialog = false;
+            if (answer)
+            {
+                Remove(mCurrentItem);
+            }
+        }
+
+        protected void Remove(NodeItemViewModel item)
+        {
+            try
+            {
+                Service.Remove(item);
+                var index = Model.FindIndex(x => x.NodeId == item.NodeId);
+                Model.RemoveAt(index);
+            }
+            catch (Exception e)
+            {
+                mCurrentItem = item;
+                ExceprionProcessing(e, FunctionModelEnum.Remove, mCurrentItem, null);
             }
         }
 

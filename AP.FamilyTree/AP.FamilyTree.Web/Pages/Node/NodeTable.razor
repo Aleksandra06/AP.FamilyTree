@@ -45,7 +45,7 @@
                         else
                         {
                             <i class="btn glyphicon glyphicon-edit" @onclick="(() => EditNodeOpenDialog(item))" title="Редактирование"></i>
-                            <i class="btn glyphicon glyphicon-remove" @onclick="(() => EditNodeOpenDialog(item))" title="Удаление"></i>
+                            <i class="btn glyphicon glyphicon-remove" @onclick="(() => RemoveOpenDialog(item))" title="Удаление"></i>
                         }
                     </td>
                 </tr>
@@ -57,6 +57,9 @@
     {
         <EditNodeDialog ViewModel="@mEditViewModel" ReloadItem="@ReloadItem" SaveItem="@Save" />
     }
+    
+    <ConfirmationDialog IsOpenConfirmation="@mIsOpenConfirmationDialog" Answer="@CloseRemoveDialog" />
+
     <InformarionDialog ViewModel="@mInformationDialog" Close="@CloseInformationDialog" />
 }
 else

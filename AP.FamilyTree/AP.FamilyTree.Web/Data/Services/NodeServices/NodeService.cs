@@ -123,5 +123,24 @@ namespace AP.FamilyTree.Web.Data.Services.NodeServices
             }
             return ConvertAndGetData(x);
         }
+
+        public void Remove(NodeItemViewModel item)
+        {
+            var human = mHumanRepo.FindById(item.HumanId);
+            if (human == null)
+            {
+                throw new ExceptionByType(ExeptionTypeEnum.OldData);
+            }
+
+            mHumanRepo.Remove(human);
+
+            var node = mNodeRepo.FindById(item.NodeId);
+            if (node == null)
+            {
+                throw new ExceptionByType(ExeptionTypeEnum.OldData);
+            }
+
+            mNodeRepo.Remove(node);
+        }
     }
 }
