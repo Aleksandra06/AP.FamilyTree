@@ -108,7 +108,12 @@ namespace AP.FamilyTree.Web.Data.Controllers
                         var user = new IdentityUser { Email = model.Email, UserName = model.Email };
                         // добавляем пользователя
                         var result = await mUserManager.CreateAsync(user, model.Password);
+                        IdentityResult roleResult = IdentityResult.Failed();
                         if (result.Succeeded)
+                        {
+                            roleResult = await mUserManager.AddToRoleAsync(user, "User");
+                        }
+                        if (result.Succeeded && roleResult.Succeeded)
                         {
                             // установка куки
                             await mSignInManager.SignInAsync(user, false);
@@ -117,6 +122,10 @@ namespace AP.FamilyTree.Web.Data.Controllers
                         else
                         {
                             foreach (var error in result.Errors)
+                            {
+                                ModelState.AddModelError(string.Empty, error.Description);
+                            }
+                            foreach (var error in roleResult.Errors)
                             {
                                 ModelState.AddModelError(string.Empty, error.Description);
                             }

@@ -52,7 +52,7 @@ namespace AP.FamilyTree.Db
 
         public List<ViewNameId> GetListTree(string userId)
         {
-            var sql = $"select TreeId Id, Name from Trees tr, Access a where tr.Id = a.TreeId and AdminUserId = '{userId}'";
+            var sql = $"select TreeId Id, Name from Trees tr, UserTree u where tr.Id = u.TreeId and u.UserId = '{userId}'";
             var result = ViewNameIdDbSet.FromSqlRaw(sql).ToList();
             return result;
         }

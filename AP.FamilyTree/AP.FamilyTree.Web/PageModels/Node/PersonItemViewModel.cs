@@ -60,6 +60,12 @@ namespace AP.FamilyTree.Web.PageModels.Node
             get => _item.Gender;
             set => _item.Gender = value;
         }
+
+        public string GenderToString
+        {
+            get => _item.Gender.ToString();
+            set => _item.Gender = int.Parse(value);
+        }
         public string Biography
         {
             get => _item.Biography;

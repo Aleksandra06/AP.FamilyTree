@@ -55,7 +55,7 @@
                         </div>
                         <div class="form-group row mb-1">
                             <label for="Gender" class="col-2 pl-0">Пол</label>
-                            <select class="form-control form-control-sm ml-0" style="width: 300px;" @bind="@ViewModel.Model.Human.Gender">
+                            <InputSelect class="form-control form-control-sm ml-0" style="width: 300px;" @bind-Value="@ViewModel.Model.Human.GenderToString">
                                 @foreach (GenderEnum x in Enum.GetValues(typeof(GenderEnum)))
                                 {
                                     @if (x == GenderEnum.Man)
@@ -81,7 +81,7 @@
                                         }
                                     }
                                 }
-                            </select>
+                            </InputSelect>
                             <ValidationMessage For="@(() => ViewModel.Model.Human.Gender)"/>
                         </div>
                         <div class="form-group row mb-1">

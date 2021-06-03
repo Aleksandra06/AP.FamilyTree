@@ -32,30 +32,22 @@
                 </MatDialogTitle>
                 <MatDialogContent>
                     <DataAnnotationsValidator />
-                    <div style="width: 1500px; display: block; height: 700px;">
+                    <div style="width: 300px; display: block; height: 100px;">
                         <div class="form-group row mb-1">
-                            <label for="MotherId" class="col-1 pl-0">Роль</label>
-                            <select class="form-control form-control-sm ml-0" style="width:300px;" @bind="@ViewModel.Model.RoleName">
-                                @if (string.IsNullOrEmpty(ViewModel.Model.RoleName))
-                                {
-                                    <option value="0" selected="selected">--</option>
-                                }
-                                else
-                                {
-                                    <option value="0">--</option>
-                                }
+                            <label for="RoleName" class="col-2 pl-0">Роль</label>
+                            <InputSelect class="form-control form-control-sm ml-0" style="width:300px;" @bind-Value="@ViewModel.Model.RoleName">
                                 @foreach (var x in mRoleList)
-                                {
-                                    if (ViewModel.Model.RoleName == x)
                                     {
+                                        if (ViewModel.Model.RoleName == x)
+                                        {
                                         <option value="@x" selected="selected">@x</option>
-                                    }
-                                    else
-                                    {
+                                        }
+                                        else
+                                        {
                                         <option value="@x">@x</option>
+                                        }
                                     }
-                                }
-                            </select>
+                            </InputSelect>
                             <ValidationMessage For="@(() => ViewModel.Model.RoleName)" />
                         </div>
                     </div>
