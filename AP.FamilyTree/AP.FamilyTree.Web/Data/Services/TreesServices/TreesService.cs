@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AP.FamilyTree.Db;
 using AP.FamilyTree.Db.Models;
 using AP.FamilyTree.Db.Views;
+using AP.FamilyTree.Web.Data.Exceptions;
 using AP.FamilyTree.Web.Globals;
 using AP.FamilyTree.Web.PageModels.Trees;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -84,7 +85,7 @@ namespace AP.FamilyTree.Web.Data.Services.TreesServices
             var result = mRepo.FindById(id);
             if (result == null)
             {
-                return null;
+                throw new ExceptionByType(ExeptionTypeEnum.OldData);
             }
 
             return await Task.FromResult(new TreeCardItemViewModel(result));
@@ -93,9 +94,9 @@ namespace AP.FamilyTree.Web.Data.Services.TreesServices
         public async Task<string> GetNameById(int id)
         {
             var result = mRepo.FindById(id);
-            if (result == null)//todo
+            if (result == null)
             {
-                return null;
+                throw new ExceptionByType(ExeptionTypeEnum.OldData);
             }
 
             return await Task.FromResult(result.Name);
@@ -125,7 +126,7 @@ namespace AP.FamilyTree.Web.Data.Services.TreesServices
             var model = mRepo.FindById(item.Id);
             if (model == null)
             {
-                return null;
+                throw new ExceptionByType(ExeptionTypeEnum.OldData);
             }
             model.EndDate = item.EndDate;
             model.StartDate = item.StartDate;
@@ -139,7 +140,7 @@ namespace AP.FamilyTree.Web.Data.Services.TreesServices
 
         public TreeCardItemViewModel Reload(TreeCardItemViewModel item)
         {
-            var model = mRepo.FindById(item.Id);
+            var model = mRepo.Reload(item.Id);
             if (model == null)
             {
                 return null;
@@ -153,10 +154,14 @@ namespace AP.FamilyTree.Web.Data.Services.TreesServices
         public void Remove(TreeCardItemViewModel item)
         {
             var userTree = mRepoUserTree.Get(x => x.TreeId == item.Id && x.UserId == mUserId)?.FirstOrDefault();
+            if (userTree == null)
+            {
+                throw new ExceptionByType(ExeptionTypeEnum.OldData);
+            }
             var userTreeItem = mRepoUserTree.FindById(userTree.Id);
             if (userTreeItem == null)
             {
-                return;
+                throw new ExceptionByType(ExeptionTypeEnum.OldData);
             }
             mRepoUserTree.Remove(userTreeItem);
             
@@ -164,6 +169,10 @@ namespace AP.FamilyTree.Web.Data.Services.TreesServices
             foreach (var access in listAccesses)
             {
                 var itemAccess = mRepoAccess.FindById(access.Id);
+                if (itemAccess == null)
+                {
+                    throw new ExceptionByType(ExeptionTypeEnum.OldData);
+                }
                 mRepoAccess.Remove(itemAccess);
             }
 
@@ -171,6 +180,10 @@ namespace AP.FamilyTree.Web.Data.Services.TreesServices
             foreach (var node in listNode)
             {
                 var itemNode = mRepoNodeModel.FindById(node.Id);
+                if (itemNode == null)
+                {
+                    throw new ExceptionByType(ExeptionTypeEnum.OldData);
+                }
                 mRepoNodeModel.Remove(itemNode);
             }
 
@@ -178,13 +191,17 @@ namespace AP.FamilyTree.Web.Data.Services.TreesServices
             foreach (var human in listHuman)
             {
                 var itemNode = mRepoHumanModel.FindById(human.Id);
+                if (itemNode == null)
+                {
+                    throw new ExceptionByType(ExeptionTypeEnum.OldData);
+                }
                 mRepoHumanModel.Remove(itemNode);
             }
 
             var model = mRepo.FindById(item.Id);
             if (model == null)
             {
-                return;
+                throw new ExceptionByType(ExeptionTypeEnum.OldData);
             }
             mRepo.Remove(model);
         }

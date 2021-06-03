@@ -60,9 +60,9 @@
                             </div>
                         }
                         <div class="form-group row mb-1">
-                            <label for="Edit" class="col-3 pl-0">Разрешено редактирование</label>
+                            <label for="Edit" class="col-6 pl-0">Разрешено редактирование</label>
                             <div class="text-left">
-                                <InputCheckbox @bind-Value="@ViewModel.Model.Edit" Class="form-control form-control-sm col-9 p-0" id="Edit"></InputCheckbox>
+                                <InputCheckbox @bind-Value="@ViewModel.Model.Edit" Class="form-control form-control-sm col-6 p-0" id="Edit"></InputCheckbox>
                             </div>
                             <ValidationMessage For="@(() => ViewModel.Model.Edit)" />
                         </div>

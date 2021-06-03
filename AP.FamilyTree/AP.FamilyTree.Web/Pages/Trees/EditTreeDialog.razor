@@ -1,5 +1,6 @@
 ﻿@using AP.FamilyTree.Web.PageModels.Trees
 @using MatBlazor
+@using AP.FamilyTree.Web.Globals
 
 <div>
     <MatDialog @bind-IsOpen="@ViewModel.DialogIsOpen" CanBeClosed="false">
@@ -9,7 +10,7 @@
                 <div class="btn-group">
                     @if (ViewModel.IsConcurrencyError)
                     {
-                        <span class="btn btn-nav btn-primary mr-1" @onclick="@(()=> ReloadItem.InvokeAsync(ViewModel.Model))">Reload</span>
+                        <span class="btn btn-nav btn-primary mr-1" @onclick="@(()=> ReloadItem.InvokeAsync(ViewModel.Model))">Обновить</span>
                     }
                     else
                     {
@@ -20,8 +21,12 @@
                 <hr />
             </MatDialogTitle>
             <MatDialogContent>
-                <DataAnnotationsValidator />
                 <div style="width: 500px; display: block; height: 300px;">
+                    <DataAnnotationsValidator />
+                    
+                    <EditUpdateErrorText IsShow="@ViewModel.IsConcurrencyError" Text="@Global.ExceptionText[ExeptionTypeEnum.Concurrency]" />
+                    <EditUpdateErrorText IsShow="@(!string.IsNullOrEmpty(ViewModel.ErrorString))" Text="@ViewModel.ErrorString" />
+
                     <div class="form-group row mb-1">
                         <label for="Name" class="col-2 pl-0">Название: </label>
                         <InputText @bind-Value="@ViewModel.Model.Name" Class="form-control form-control-sm col-10" id="Name"></InputText>

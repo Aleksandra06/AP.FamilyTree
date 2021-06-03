@@ -21,7 +21,7 @@
                     <div class="btn-group">
                         @if (ViewModel.IsConcurrencyError)
                         {
-                            <span class="btn btn-nav btn-primary mr-1" @onclick="@(()=> ReloadItem.InvokeAsync(ViewModel.Model))">Reload</span>
+                            <span class="btn btn-nav btn-primary mr-1" @onclick="@(()=> ReloadItem.InvokeAsync(ViewModel.Model))">Обновить</span>
                         }
                         else
                         {
@@ -32,26 +32,30 @@
                     <hr />
                 </MatDialogTitle>
                 <MatDialogContent>
-                    <DataAnnotationsValidator />
                     <div style="width: 1000px; display: block; height: 700px;">
+                        <DataAnnotationsValidator />
+                        
+                        <EditUpdateErrorText IsShow="@ViewModel.IsConcurrencyError" Text="@Global.ExceptionText[ExeptionTypeEnum.Concurrency]" />
+                        <EditUpdateErrorText IsShow="@(!string.IsNullOrEmpty(ViewModel.ErrorString))" Text="@ViewModel.ErrorString" />
+
                         <div class="form-group row mb-1">
                             <label for="Name" class="col-2 pl-0">Имя</label>
                             <InputText @bind-Value="@ViewModel.Model.Human.Name" Class="form-control form-control-sm col-9" id="Name"></InputText>
-                            <ValidationMessage For="@(() => ViewModel.Model.Human.Name)" />
+                            <ValidationMessage For="@(() => ViewModel.Model.Human.Name)"/>
                         </div>
                         <div class="form-group row mb-1">
                             <label for="Surname" class="col-2 pl-0">Фамилия</label>
                             <InputText @bind-Value="@ViewModel.Model.Human.Surname" Class="form-control form-control-sm col-9" id="Surname"></InputText>
-                            <ValidationMessage For="@(() => ViewModel.Model.Human.Surname)" />
+                            <ValidationMessage For="@(() => ViewModel.Model.Human.Surname)"/>
                         </div>
                         <div class="form-group row mb-1">
                             <label for="MiddleName" class="col-2 pl-0">Отчество</label>
                             <InputText @bind-Value="@ViewModel.Model.Human.MiddleName" Class="form-control form-control-sm col-9" id="MiddleName"></InputText>
-                            <ValidationMessage For="@(() => ViewModel.Model.Human.MiddleName)" />
+                            <ValidationMessage For="@(() => ViewModel.Model.Human.MiddleName)"/>
                         </div>
                         <div class="form-group row mb-1">
                             <label for="Gender" class="col-2 pl-0">Пол</label>
-                            <select class="form-control form-control-sm ml-0" style="width:300px;" @bind="@ViewModel.Model.Human.Gender">
+                            <select class="form-control form-control-sm ml-0" style="width: 300px;" @bind="@ViewModel.Model.Human.Gender">
                                 @foreach (GenderEnum x in Enum.GetValues(typeof(GenderEnum)))
                                 {
                                     @if (x == GenderEnum.Man)
@@ -78,13 +82,13 @@
                                     }
                                 }
                             </select>
-                            <ValidationMessage For="@(() => ViewModel.Model.Human.Gender)" />
+                            <ValidationMessage For="@(() => ViewModel.Model.Human.Gender)"/>
                         </div>
                         <div class="form-group row mb-1">
                             <label for="Photo" class="col-2 pl-0">Фото</label>
                             <div class="col-5 pl-0 pb-0 mb-0">
                                 <label class="btn btn-nav mb-0">
-                                    <BlazorInputFile.InputFile OnChange="@HandleFileSelected" class="choiseFile" />
+                                    <BlazorInputFile.InputFile OnChange="@HandleFileSelected" class="choiseFile"/>
                                     @buttonUploadName
                                 </label>
                                 <span class="btn btn-nav" @onclick="@DeleteFile">Удалить файл</span>
@@ -94,94 +98,94 @@
                             <label for="MotherIdToString" class="col-2 pl-0">Мать</label>
                             <InputSelect @bind-Value="@ViewModel.Model.MotherIdToString" Class="form-control form-control-sm col-9" id="MotherId">
                                 @if (ViewModel.Model.MotherId == 0)
-                                    {
+                                {
                                     <option value="0" selected="selected">--</option>
+                                }
+                                else
+                                {
+                                    <option value="0">--</option>
+                                }
+                                @foreach (var x in MotherList)
+                                {
+                                    if (ViewModel.Model.MotherId == x.Id)
+                                    {
+                                        <option value="@x.Id" selected="selected">@x.Name @x.MiddleName @x.Surname</option>
                                     }
                                     else
                                     {
-                                    <option value="0">--</option>
-                                    }
-                                @foreach (var x in MotherList)
-                                    {
-                                        if (ViewModel.Model.MotherId == x.Id)
-                                        {
-                                        <option value="@x.Id" selected="selected">@x.Name @x.MiddleName @x.Surname</option>
-                                        }
-                                        else
-                                        {
                                         <option value="@x.Id">@x.Name @x.MiddleName @x.Surname</option>
-                                        }
                                     }
+                                }
                             </InputSelect>
-                            <ValidationMessage For="@(() => ViewModel.Model.MotherId)" />
+                            <ValidationMessage For="@(() => ViewModel.Model.MotherId)"/>
                         </div>
                         <div class="form-group row mb-1">
                             <label for="FatherId" class="col-2 pl-0">Отец</label>
                             <InputSelect @bind-Value="@ViewModel.Model.FatherIdToString" Class="form-control form-control-sm col-9" id="FatherId">
                                 @if (ViewModel.Model.FatherId == 0)
-                                    {
+                                {
                                     <option value="0" selected="selected">--</option>
+                                }
+                                else
+                                {
+                                    <option value="0">--</option>
+                                }
+                                @foreach (var x in FatherList)
+                                {
+                                    if (ViewModel.Model.FatherId == x.Id)
+                                    {
+                                        <option value="@x.Id" selected="selected">@x.Name @x.MiddleName @x.Surname</option>
                                     }
                                     else
                                     {
-                                    <option value="0">--</option>
-                                    }
-                                @foreach (var x in FatherList)
-                                    {
-                                        if (ViewModel.Model.FatherId == x.Id)
-                                        {
-                                        <option value="@x.Id" selected="selected">@x.Name @x.MiddleName @x.Surname</option>
-                                        }
-                                        else
-                                        {
                                         <option value="@x.Id">@x.Name @x.MiddleName @x.Surname</option>
-                                        }
                                     }
+                                }
                             </InputSelect>
-                            <ValidationMessage For="@(() => ViewModel.Model.FatherId)" />
+                            <ValidationMessage For="@(() => ViewModel.Model.FatherId)"/>
                         </div>
                         <div class="form-group row mb-1">
                             <label for="WeddingDate" class="col-2 pl-0">Дата свадьбы</label>
                             <InputDate @bind-Value="@ViewModel.Model.Human.WeddingDate" Class="form-control form-control-sm col-9" id="WeddingDate"></InputDate>
-                            <ValidationMessage For="@(() => ViewModel.Model.Human.WeddingDate)" />
+                            <ValidationMessage For="@(() => ViewModel.Model.Human.WeddingDate)"/>
                         </div>
                         <div class="form-group row mb-1">
                             <label for="Year1" class="col-2 pl-0">Годы жизни</label>
                             <InputDate @bind-Value="@ViewModel.Model.Human.BirthDate" Class="form-control form-control-sm col-4" id="Year1"></InputDate>
                             <i class="pl-1 pr-1">-</i>
                             <InputDate @bind-Value="@ViewModel.Model.Human.DeathDate" Class="form-control form-control-sm col-4" id="Year1"></InputDate>
-                            <ValidationMessage For="@(() => ViewModel.Model.Human.BirthDate)" />
-                            <ValidationMessage For="@(() => ViewModel.Model.Human.DeathDate)" />
+                            <ValidationMessage For="@(() => ViewModel.Model.Human.BirthDate)"/>
+                            <ValidationMessage For="@(() => ViewModel.Model.Human.DeathDate)"/>
                         </div>
                         <div class="form-group row mb-1">
                             <label for="PlaceOfBirth" class="col-2 pl-0">Место рождения</label>
                             <InputText @bind-Value="@ViewModel.Model.Human.PlaceOfBirth" Class="form-control form-control-sm col-9" id="PlaceOfBirth"></InputText>
-                            <ValidationMessage For="@(() => ViewModel.Model.Human.PlaceOfBirth)" />
+                            <ValidationMessage For="@(() => ViewModel.Model.Human.PlaceOfBirth)"/>
                         </div>
                         <div class="form-group row mb-1">
                             <label for="PlaceOfDeath" class="col-2 pl-0">Место смерти</label>
                             <InputText @bind-Value="@ViewModel.Model.Human.PlaceOfDeath" Class="form-control form-control-sm col-9" id="PlaceOfDeath"></InputText>
-                            <ValidationMessage For="@(() => ViewModel.Model.Human.PlaceOfDeath)" />
+                            <ValidationMessage For="@(() => ViewModel.Model.Human.PlaceOfDeath)"/>
                         </div>
                         <div class="form-group row mb-1">
                             <label for="BurialPlace" class="col-2 pl-0">Место захоронения</label>
                             <InputText @bind-Value="@ViewModel.Model.Human.BurialPlace" Class="form-control form-control-sm col-9" id="BurialPlace"></InputText>
-                            <ValidationMessage For="@(() => ViewModel.Model.Human.BurialPlace)" />
+                            <ValidationMessage For="@(() => ViewModel.Model.Human.BurialPlace)"/>
                         </div>
                         <div class="form-group row mb-1">
                             <label for="Nationality" class="col-2 pl-0">Национальность</label>
                             <InputText @bind-Value="@ViewModel.Model.Human.Nationality" Class="form-control form-control-sm col-9" id="Nationality"></InputText>
-                            <ValidationMessage For="@(() => ViewModel.Model.Human.Nationality)" />
+                            <ValidationMessage For="@(() => ViewModel.Model.Human.Nationality)"/>
                         </div>
                         <div class="form-group row mb-1">
                             <label for="Works" class="col-2 pl-0">Занятия</label>
                             <InputTextArea rows="0" @bind-Value="@ViewModel.Model.Human.Works" Class="form-control form-control-sm col-9" id="Works"></InputTextArea>
-                            <ValidationMessage For="@(() => ViewModel.Model.Human.Works)" />
+                            <ValidationMessage For="@(() => ViewModel.Model.Human.Works)"/>
                         </div>
                         <div class="form-group row mb-1">
                             <label for="Biography" class="col-2 pl-0">Биография</label>
                             <InputTextArea rows="4" @bind-Value="@ViewModel.Model.Human.Biography" Class="form-control form-control-sm col-9" id="Biography"></InputTextArea>
-                            <ValidationMessage For="@(() => ViewModel.Model.Human.Biography)" />
+                            <ValidationMessage For="@(() => ViewModel.Model.Human.Biography)"/>
                         </div>
                     </div>
                 </MatDialogContent>

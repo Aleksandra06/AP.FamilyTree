@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using AP.FamilyTree.Db;
 using AP.FamilyTree.Db.Models;
+using AP.FamilyTree.Web.Data.Exceptions;
+using AP.FamilyTree.Web.Globals;
 using AP.FamilyTree.Web.PageModels.Node;
 
 namespace AP.FamilyTree.Web.Data.Services.NodeServices
@@ -71,7 +73,20 @@ namespace AP.FamilyTree.Web.Data.Services.NodeServices
 
         public NodeItemViewModel Update(NodeItemViewModel item)
         {
+            var modelNode = mNodeRepo.FindById(item.NodeId);
+            if (modelNode == null)
+            {
+                throw new ExceptionByType(ExeptionTypeEnum.OldData);
+            }
+            modelNode.FatherId = item.FatherId ?? 0;
+            modelNode.MotherId = item.MotherId ?? 0;
+            modelNode = mNodeRepo.Update(modelNode, item.Item.RowVersion);
+
             var modelHuman = mHumanRepo.FindById(item.HumanId);
+            if (modelHuman == null)
+            {
+                throw new ExceptionByType(ExeptionTypeEnum.OldData);
+            }
             modelHuman.Name = item.Human.Name;
             modelHuman.Surname = item.Human.Surname;
             modelHuman.BirthDate = item.Human.BirthDate;
@@ -86,11 +101,6 @@ namespace AP.FamilyTree.Web.Data.Services.NodeServices
             modelHuman.WeddingDate = item.Human.WeddingDate;
             modelHuman.Works = item.Human.Works;
             modelHuman = mHumanRepo.Update(modelHuman);
-
-            var modelNode = mNodeRepo.FindById(item.NodeId);
-            modelNode.FatherId = item.FatherId ?? 0;
-            modelNode.MotherId = item.MotherId ?? 0;
-            modelNode = mNodeRepo.Update(modelNode);
 
             return new NodeItemViewModel()
             {
@@ -107,7 +117,10 @@ namespace AP.FamilyTree.Web.Data.Services.NodeServices
         public NodeItemViewModel ReloadItem(NodeItemViewModel item)
         {
             var x = mNodeRepo.Reload(item.NodeId);
-            if (x == null) return null;
+            if (x == null)
+            {
+                return null;
+            }
             return ConvertAndGetData(x);
         }
     }

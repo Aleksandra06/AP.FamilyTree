@@ -1,0 +1,11 @@
+﻿@if (IsShow)
+{
+    <div style="color: #dc3545; max-width:600px;" class="mb-2">
+        @Text
+    </div>
+}
+
+@code {
+    [Parameter] public bool IsShow { get; set; }
+    [Parameter] public string Text { get; set; }
+}

@@ -7,14 +7,21 @@
         <h6>@Model.Name</h6>
         <h6>@Model.DateString</h6>
         <div class="row" style="text-align: center;">
-            <i class="btn glyphicon glyphicon-eye-open" @onclick="@Open"></i>
-            @if (Model.Edit)
+            @if (Model.IsRefreshed)
             {
-                <i class="btn glyphicon glyphicon-edit" @onclick="@(()=> Change.InvokeAsync(Model))"></i>
+                <i class="btn glyphicon glyphicon-refresh" @onclick="@(() => ReloadItem.InvokeAsync(Model))"></i>
             }
-            @if (Model.Admin)
+            else
             {
-                <i class="btn glyphicon glyphicon-remove" @onclick="@(() => OpenRemoveDialog())"></i>
+                <i class="btn glyphicon glyphicon-eye-open" @onclick="@Open"></i>
+                @if (Model.Edit)
+                {
+                    <i class="btn glyphicon glyphicon-edit" @onclick="@(() => Change.InvokeAsync(Model))"></i>
+                }
+                @if (Model.Admin)
+                {
+                    <i class="btn glyphicon glyphicon-remove" @onclick="@(() => OpenRemoveDialog())"></i>
+                }
             }
         </div>
     </div>
@@ -26,6 +33,7 @@
     [Parameter] public TreeCardItemViewModel Model { get; set; }
     [Parameter] public EventCallback<TreeCardItemViewModel> Change { get; set; }
     [Parameter] public EventCallback<TreeCardItemViewModel> Remove { get; set; }
+    [Parameter] public EventCallback<TreeCardItemViewModel> ReloadItem { get; set; }
 
     private bool mIsOpenConfirmationDialog = false;
 

@@ -37,8 +37,17 @@
                     <td>@GlobalFunction.ConvertToLiveYear(item.Human.BirthDate, item.Human.DeathDate)</td>
                     <td>@item.Mother?.Name</td>
                     <td>@item.Father?.Name</td>
-                    <td><i class="btn glyphicon glyphicon-edit" @onclick="(() => EditNodeOpenDialog(item))" title="Редактирование"></i></td>
-                    <td><i class="btn glyphicon glyphicon-remove" @onclick="(() => EditNodeOpenDialog(item))" title="Удаление"></i></td>
+                    <td>
+                        @if (item.IsRefreshed)
+                        {
+                            <i class="btn glyphicon glyphicon-refresh" @onclick="(() => ReloadItem(item))" title="Обновление"></i>
+                        }
+                        else
+                        {
+                            <i class="btn glyphicon glyphicon-edit" @onclick="(() => EditNodeOpenDialog(item))" title="Редактирование"></i>
+                            <i class="btn glyphicon glyphicon-remove" @onclick="(() => EditNodeOpenDialog(item))" title="Удаление"></i>
+                        }
+                    </td>
                 </tr>
             }
         }

@@ -40,6 +40,7 @@ namespace AP.FamilyTree.Web.PageModels.Trees
             }
         }
         [Required(ErrorMessage = "Это поле должно быть заполнено")]
+        [StringLength(50, ErrorMessage = "Привышена максимальная длина (20 символов)")]
         public string Name
         {
             get
@@ -82,6 +83,7 @@ namespace AP.FamilyTree.Web.PageModels.Trees
             }
         }
         [Required(ErrorMessage = "Это поле должно быть заполнена")]
+        [StringLength(50, ErrorMessage = "Привышена максимальная длина (20 символов)")]
         public string Surnames
         {
             get
