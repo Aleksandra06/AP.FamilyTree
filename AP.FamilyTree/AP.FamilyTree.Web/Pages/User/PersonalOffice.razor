@@ -71,6 +71,13 @@
     <hr />
 
     <div class="pb-3">
+        <h3>Предложение по улучшению сайта</h3>
+        <span class="btn btn-nav" @onclick="@OpenReviewDialog">Оставить</span>
+    </div>
+
+    <hr />
+
+    <div class="pb-3">
         <AccessTable />
     </div>
 
@@ -84,6 +91,7 @@
     }
 
     <InformarionDialog ViewModel="@mInformationDialog" Close="@CloseInformationDialog" />
+    <ReviewDialog DialogIsOpen="@mReviewDialogIsOpen"/>
 }
 else
 {

@@ -1,0 +1,81 @@
+﻿@using AP.FamilyTree.Web.Globals
+@using AP.FamilyTree.Db.Models
+@using AP.FamilyTree.Web.Data.Services.UserServices
+@inherits AP.FamilyTree.Web.PageModels.BaseViewModel
+@inject ReviewService Service
+
+@if (!IsFailed)
+{
+    @if (!mIsItemLoaded)
+    {
+        <span class="spinner-border spinner-border-sm centerSpinner" role="status" aria-hidden="true"></span>
+        <div class="overlay"></div>
+    }
+    @if (Review != null)
+    {
+        <div>
+            <MatDialog @bind-IsOpen="@DialogIsOpen" CanBeClosed="false">
+                <EditForm Model="@Review">
+                    <MatDialogTitle class="diHeader">
+                        <h3>Отзыв или предложение</h3>
+                        <div class="btn-group">
+                            <input value="Отправить" class="btn btn-nav btn-primary mr-1" style="float: right; background: darkgreen; width: 200px;" @onclick="@(e => { Send(); })" />
+                            <span class="btn btn-nav" @onclick="@(e => { DialogIsOpen = false; })">X</span>
+                        </div>
+                        <hr />
+                    </MatDialogTitle>
+                    <MatDialogContent>
+                        <div style="width: 500px; display: block; height: 400px;">
+                            <InputTextArea rows="17" class="form-control form-control-sm ml-0 col-12" @bind-Value="@Review.ReviewText"></InputTextArea>
+                        </div>
+                    </MatDialogContent>
+                </EditForm>
+            </MatDialog>
+        </div>
+    }
+}
+else
+{
+    <ErrorComponent Model="@ErrorModel" />
+}
+
+@code {
+    [Parameter]
+    public bool DialogIsOpen { get; set; }
+    private Review Review { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        mInformationDialog.Btn = "Ок";
+        SetPageName("ReviewDialog");
+        return base.OnInitializedAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        try
+        {
+            Review = new Review();
+        }
+        catch (Exception e)
+        {
+            ExceprionProcessing(e, FunctionModelEnum.Other, null, null, "OnParametersSetAsync");
+            StateHasChanged();
+        }
+    }
+
+    private void Send()
+    {
+        try
+        {
+            Service.Create(Review);
+            DialogIsOpen = false;
+        }
+        catch (Exception e)
+        {
+            ExceprionProcessing(e, FunctionModelEnum.Other, null, null, "Send");
+            StateHasChanged();
+        }
+    }
+
+}

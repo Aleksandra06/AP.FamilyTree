@@ -27,6 +27,7 @@ namespace AP.FamilyTree.Db
         public DbSet<ViewUserModel> ViewUserModelDbSet { get; set; }
         public DbSet<ViewName> ViewNameDbSet { get; set; }
         public DbSet<ViewNameId> ViewNameIdDbSet { get; set; }
+        public DbSet<Review> ReviewDbSet { get; set; }
         DbSet<LogApplicationError> LogApplicationErrorDbset { get; set; }
 
         public List<string> GetAllRolesSort()

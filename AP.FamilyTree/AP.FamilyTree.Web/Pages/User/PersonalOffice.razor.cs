@@ -19,6 +19,8 @@ namespace AP.FamilyTree.Web.Pages.User
         protected bool mFinishDialogIsOpen = false;
         protected bool IsSysAdminRole = false;
 
+        protected bool mReviewDialogIsOpen = false;
+
         protected override Task OnInitializedAsync()
         {
             mInformationDialog.Btn = "Ок";
@@ -75,6 +77,11 @@ namespace AP.FamilyTree.Web.Pages.User
         {
             Model = null;
             Service = null;
+        }
+
+        protected void OpenReviewDialog()
+        {
+            mReviewDialogIsOpen = true;
         }
     }
 }
