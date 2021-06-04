@@ -111,6 +111,12 @@ namespace AP.FamilyTree.Web.PageModels.Node
             get => _item.Photo;
             set => _item.Photo = value;
         }
+
+        public string PhotoSvg
+        {
+            get => _item.PhotoSvg;
+            set => _item.PhotoSvg = value;
+        }
         public object Clone()
         {
             PersonItemViewModel tempObject = (PersonItemViewModel)this.MemberwiseClone();

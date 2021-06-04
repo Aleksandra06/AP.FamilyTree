@@ -24,6 +24,7 @@ namespace AP.FamilyTree.Db.Models
         public string Works { get; set; }
         public string Biography { get; set; }
         public byte[] Photo { get; set; }
+        public string PhotoSvg { get; set; }
 
         public object Clone()
         {

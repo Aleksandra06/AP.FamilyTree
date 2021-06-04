@@ -4,6 +4,9 @@
 <div class="top-row px-4" style="background-color: lightgreen;">
 
     <div class="row mr-auto">
+        <a class="nav-link" href="" @onclick:preventDefault @onclick="@(() => UriHelper.NavigateTo(UriHelper.BaseUri, true))">
+            <i class="glyphicon glyphicon-tree-deciduous"></i>
+        </a>
         <AuthorizeView Policy="User">
             <Authorized>
                 <a class="nav-link" href="Counter" @onclick:preventDefault @onclick="@(() => UriHelper.NavigateTo(UriHelper.BaseUri + "trees", true))">

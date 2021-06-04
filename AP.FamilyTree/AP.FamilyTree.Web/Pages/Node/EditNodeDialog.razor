@@ -265,9 +265,19 @@ else
             var byteRes = new byte[file.Size];
             await ms.ReadAsync(byteRes, 0, (int)file.Size);
             await Task.CompletedTask;
+            ViewModel.Model.Human.PhotoSvg = SVGUriToDataUri(byteRes);
             ViewModel.Model.Human.Photo = byteRes;
         }
         buttonUploadName = ViewModel.Model.Human.Photo?.Length > 0 ? "Изменить файл" : "Загрузить файл";
+    }
+
+    public string SVGUriToDataUri(byte[] imageBytes)
+    {
+        using (var wc = new System.Net.WebClient())
+        {
+            var imageBase64 = Convert.ToBase64String(imageBytes);
+            return "data:image/svg+xml;base64," + imageBase64;
+        }
     }
 
     private void DeleteFile()

@@ -100,6 +100,8 @@ namespace AP.FamilyTree.Web.Data.Services.NodeServices
             modelHuman.PlaceOfDeath = item.Human.PlaceOfDeath;
             modelHuman.WeddingDate = item.Human.WeddingDate;
             modelHuman.Works = item.Human.Works;
+            modelHuman.Photo = item.Human.Photo;
+            modelHuman.PhotoSvg = item.Human.PhotoSvg;
             modelHuman = mHumanRepo.Update(modelHuman);
 
             return new NodeItemViewModel()

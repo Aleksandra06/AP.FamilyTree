@@ -53,7 +53,7 @@ var control;
 //}
 
 window.Test = {
-    functionOne: function (ids, names, dates, parents, count) {
+    functionOne: function (ids, names, dates, parents, count, photo) {
         var options = new FamConfig();
 
         var item = new Array(count);
@@ -63,7 +63,7 @@ window.Test = {
                 parents: parents[i],
                 title: names[i],
                 description: dates[i],
-                image: photos.a,
+                image: photo[i],
                 link: "https://www.basicprimitives.com/reactusecases/firstorganizationalchart"
             });
         }
@@ -146,7 +146,7 @@ window.Test = {
         options.normalItemsInterval = 10;
         options.dotItemsInterval = 10;
         options.lineItemsInterval = 4;
-        //options.hasSelectorCheckbox = primitives.Enabled.True;
+        options.hasSelectorCheckbox = Enabled.False,
         
 
         control = FamDiagram(document.getElementById("basicdiagram"), options);
