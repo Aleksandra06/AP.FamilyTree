@@ -1,0 +1,66 @@
+﻿@page "/review"
+@inherits ReviewPageViewModel
+@attribute [Authorize(Policy = "Administrator")]
+
+@if (!IsFailed)
+{
+    @if (!mIsItemLoaded)
+    {
+        <span class="spinner-border spinner-border-sm centerSpinner" role="status" aria-hidden="true"></span>
+        <div class="overlay"></div>
+    }
+
+    <table class="table table-sm col-12">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Дата</th>
+                <th>Пользователь</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        @if (Model != null)
+        {
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ReviewId</td>
+                    <td>@item.InsertDate.ToShortDateString()</td>
+                    <td>@item.UserName</td>
+                    <td>
+                        <i class="btn glyphicon glyphicon-eye-open" @onclick="@(()=> OpenPreview(item))"></i>
+                    </td>
+                    <td>
+                        @if (item.IsRefreshed)
+                        {
+                            <i class="btn glyphicon glyphicon-refresh" @onclick="(() => ReloadItem(item))" title="Обновление"></i>
+                        }
+                        else
+                        {
+                            @if (item.Accepted)
+                            {
+                                <i class="btn glyphicon glyphicon-ok" title="Выполнено" style="color: green;" @onclick="@(()=> { ChangeStatusOpenDialog(item); })"></i>
+                            }
+                            else
+                            {
+                                <i class="btn glyphicon glyphicon-ok" title="Не обработано" style="color: grey;" @onclick="@(()=> { ChangeStatusOpenDialog(item); })"></i>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+
+    <ConfirmationDialog Title="Изменение статуса отзыва" Text="Вы действтительно хотите изменить статус отзыва?" BtnYes="Изменить" 
+                        IsOpenConfirmation="@mIsOpenConfirmationDialog" Answer="@ChangeStatusCloseDialog" />
+
+    <InformarionDialog ViewModel="@mPreviewViewModel" Close="@ClosePreviewDialog" />
+
+    <InformarionDialog ViewModel="@mInformationDialog" Close="@CloseInformationDialog" />
+}
+else
+{
+    <ErrorComponent Model="@ErrorModel" />
+}

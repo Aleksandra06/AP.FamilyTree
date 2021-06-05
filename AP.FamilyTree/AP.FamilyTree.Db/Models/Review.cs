@@ -16,5 +16,6 @@ namespace AP.FamilyTree.Db.Models
         public string UserId { get; set; }
         public string ReviewText { get; set; }
         public DateTime InsertDate { get; set; }
+        public bool Accepted { get; set; }
     }
 }

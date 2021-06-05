@@ -16,6 +16,9 @@
         </AuthorizeView>
         <AuthorizeView Policy="Administrator">
             <Authorized>
+                <a class="nav-link" href="review" @onclick:preventDefault @onclick="@(() => UriHelper.NavigateTo(UriHelper.BaseUri + "review", true))">
+                    Отзывы
+                </a>
                 <a class="nav-link" href="system/errors" @onclick:preventDefault @onclick="@(() => UriHelper.NavigateTo(UriHelper.BaseUri + "system/errors", true))">
                     Система
                 </a>
