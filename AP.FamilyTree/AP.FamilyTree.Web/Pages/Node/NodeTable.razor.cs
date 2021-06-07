@@ -39,11 +39,14 @@ namespace AP.FamilyTree.Web.Pages.Node
                 try
                 {
                     Model = await Service.GetByTreeId(TreeId);
-                    StateHasChanged();
                 }
                 catch (Exception e)
                 {
                     ExceprionProcessing(e, FunctionModelEnum.OnAfterRenderAsync, null, null);
+                }
+                finally
+                {
+                    StateHasChanged();
                 }
             }
         }

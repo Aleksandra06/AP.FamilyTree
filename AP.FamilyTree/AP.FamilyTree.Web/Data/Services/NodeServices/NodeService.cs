@@ -23,7 +23,6 @@ namespace AP.FamilyTree.Web.Data.Services.NodeServices
         public async Task<List<NodeItemViewModel>> GetByTreeId(int treeId)
         {
             var result = mNodeRepo.Get(x => x.TreeId == treeId).Select(ConvertAndGetData).ToList();
-
             return await Task.FromResult(result);
         }
 
